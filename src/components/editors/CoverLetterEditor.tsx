@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { CoverLetterData } from '../../types/resume';
 
@@ -9,21 +9,45 @@ interface CoverLetterEditorProps {
 
 const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate }) => {
   const [showTemplates, setShowTemplates] = useState(false);
+  const [localData, setLocalData] = useState({
+    recipientInfo: data.recipientInfo,
+    content: data.content
+  });
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setLocalData({
+      recipientInfo: data.recipientInfo,
+      content: data.content
+    });
+  }, [data.recipientInfo, data.content]);
+
+  const updateWithDebounce = (newData: Omit<CoverLetterData, 'personalInfo'>) => {
+    setLocalData(newData);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => onUpdate(newData), 300);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleRecipientChange = (field: keyof typeof data.recipientInfo, value: string) => {
     const newData = {
-      recipientInfo: { ...data.recipientInfo, [field]: value },
-      content: data.content
+      recipientInfo: { ...localData.recipientInfo, [field]: value },
+      content: localData.content
     };
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   const handleContentChange = (field: keyof typeof data.content, value: string) => {
     const newData = {
-      recipientInfo: data.recipientInfo,
-      content: { ...data.content, [field]: value }
+      recipientInfo: localData.recipientInfo,
+      content: { ...localData.content, [field]: value }
     };
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   const coverLetterTemplates = {
@@ -68,14 +92,14 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
     const template = coverLetterTemplates[templateKey as keyof typeof coverLetterTemplates];
     if (template) {
       const newData = {
-        recipientInfo: data.recipientInfo,
+        recipientInfo: localData.recipientInfo,
         content: {
           opening: template.opening,
           body: template.body,
           closing: template.closing
         }
       };
-      onUpdate(newData);
+      updateWithDebounce(newData);
       setShowTemplates(false);
     }
   };
@@ -131,7 +155,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
             <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Hiring Manager</label>
             <input
               type="text"
-              value={data.recipientInfo.hiringManager}
+              value={localData.recipientInfo.hiringManager}
               onChange={(e) => handleRecipientChange('hiringManager', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
               style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
@@ -142,7 +166,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
             <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Company</label>
             <input
               type="text"
-              value={data.recipientInfo.company}
+              value={localData.recipientInfo.company}
               onChange={(e) => handleRecipientChange('company', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
               style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
@@ -153,7 +177,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
             <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Position</label>
             <input
               type="text"
-              value={data.recipientInfo.position}
+              value={localData.recipientInfo.position}
               onChange={(e) => handleRecipientChange('position', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
               style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
@@ -164,7 +188,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
             <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Date</label>
             <input
               type="text"
-              value={data.recipientInfo.date}
+              value={localData.recipientInfo.date}
               onChange={(e) => handleRecipientChange('date', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
               style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
@@ -179,7 +203,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Opening Paragraph</label>
           <textarea
-            value={data.content.opening}
+            value={localData.content.opening}
             onChange={(e) => handleContentChange('opening', e.target.value)}
             rows={4}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"
@@ -191,7 +215,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Body Paragraphs</label>
           <textarea
-            value={data.content.body}
+            value={localData.content.body}
             onChange={(e) => handleContentChange('body', e.target.value)}
             rows={8}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"
@@ -203,7 +227,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Closing Paragraph</label>
           <textarea
-            value={data.content.closing}
+            value={localData.content.closing}
             onChange={(e) => handleContentChange('closing', e.target.value)}
             rows={3}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TechnicalSkills } from '../../types/resume';
 
 interface TechnicalSkillsEditorProps {
@@ -7,9 +7,35 @@ interface TechnicalSkillsEditorProps {
 }
 
 const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onUpdate }) => {
+  const [localData, setLocalData] = useState<TechnicalSkills>(data);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Update local state when data prop changes from parent
+  useEffect(() => {
+    setLocalData(data);
+  }, [data]);
+
   const handleChange = (field: keyof TechnicalSkills, value: string) => {
-    onUpdate({ ...data, [field]: value });
+    const newData = { ...localData, [field]: value };
+    setLocalData(newData);
+    
+    // Debounce the parent update
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      onUpdate(newData);
+    }, 300);
   };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -17,7 +43,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
         <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Programming Languages</label>
         <input
           type="text"
-          value={data.languages}
+          value={localData.languages}
           onChange={(e) => handleChange('languages', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
@@ -29,7 +55,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
         <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Frameworks & Libraries</label>
         <input
           type="text"
-          value={data.frameworks}
+          value={localData.frameworks}
           onChange={(e) => handleChange('frameworks', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
@@ -41,7 +67,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
         <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Tools & Platforms</label>
         <input
           type="text"
-          value={data.tools}
+          value={localData.tools}
           onChange={(e) => handleChange('tools', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
@@ -53,7 +79,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
         <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Methodologies</label>
         <input
           type="text"
-          value={data.methodologies}
+          value={localData.methodologies}
           onChange={(e) => handleChange('methodologies', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
@@ -65,7 +91,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
         <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Certifications</label>
         <input
           type="text"
-          value={data.certifications}
+          value={localData.certifications}
           onChange={(e) => handleChange('certifications', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}

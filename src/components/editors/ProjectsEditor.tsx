@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Project } from '../../types/resume';
 
@@ -8,6 +8,24 @@ interface ProjectsEditorProps {
 }
 
 const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate }) => {
+  const [localData, setLocalData] = useState<Project[]>(data);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setLocalData(data);
+  }, [data]);
+
+  const updateWithDebounce = (newData: Project[]) => {
+    setLocalData(newData);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => onUpdate(newData), 300);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
   const addProject = () => {
     const newProject: Project = {
       name: "",
@@ -16,50 +34,50 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate }) => {
       description: [""],
       url: ""
     };
-    onUpdate([...data, newProject]);
+    updateWithDebounce([...localData, newProject]);
   };
 
   const removeProject = (index: number) => {
-    onUpdate(data.filter((_, i) => i !== index));
+    updateWithDebounce(localData.filter((_, i) => i !== index));
   };
 
   const updateProject = (index: number, field: keyof Project, value: any) => {
-    const newData = data.map((project, i) => 
+    const newData = localData.map((project, i) => 
       i === index ? { ...project, [field]: value } : project
     );
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   const addDescription = (projectIndex: number) => {
-    const newData = data.map((project, i) => 
+    const newData = localData.map((project, i) => 
       i === projectIndex ? { ...project, description: [...project.description, ""] } : project
     );
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   const removeDescription = (projectIndex: number, descIndex: number) => {
-    const newData = data.map((project, i) => 
+    const newData = localData.map((project, i) => 
       i === projectIndex ? { 
         ...project, 
         description: project.description.filter((_, j) => j !== descIndex) 
       } : project
     );
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   const updateDescription = (projectIndex: number, descIndex: number, value: string) => {
-    const newData = data.map((project, i) => 
+    const newData = localData.map((project, i) => 
       i === projectIndex ? { 
         ...project, 
         description: project.description.map((desc, j) => j === descIndex ? value : desc)
       } : project
     );
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   return (
     <div className="space-y-6">
-      {data.map((project, projectIndex) => (
+      {localData.map((project, projectIndex) => (
         <div key={projectIndex} className="border border-gray-200 rounded-lg p-4">
           <div className="flex justify-between items-center mb-4">
             <h4 className="font-semibold text-gray-800">Project #{projectIndex + 1}</h4>

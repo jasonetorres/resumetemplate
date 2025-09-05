@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Education } from '../../types/resume';
 
@@ -8,29 +8,48 @@ interface EducationEditorProps {
 }
 
 const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate }) => {
+  const [localData, setLocalData] = useState<Education[]>(data);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setLocalData(data);
+  }, [data]);
+
+  const updateWithDebounce = (newData: Education[]) => {
+    setLocalData(newData);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => onUpdate(newData), 300);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   const addEducation = () => {
     const newEdu: Education = {
       institution: "",
       degree: "",
       duration: ""
     };
-    onUpdate([...data, newEdu]);
+    updateWithDebounce([...localData, newEdu]);
   };
 
   const removeEducation = (index: number) => {
-    onUpdate(data.filter((_, i) => i !== index));
+    updateWithDebounce(localData.filter((_, i) => i !== index));
   };
 
   const updateEducation = (index: number, field: keyof Education, value: string) => {
-    const newData = data.map((edu, i) => 
+    const newData = localData.map((edu, i) => 
       i === index ? { ...edu, [field]: value } : edu
     );
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   return (
     <div className="space-y-6">
-      {data.map((edu, index) => (
+      {localData.map((edu, index) => (
         <div key={index} className="border border-gray-200 rounded-lg p-4">
           <div className="flex justify-between items-center mb-4">
             <h4 className="font-semibold text-gray-800">Education #{index + 1}</h4>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ProfessionalSummary } from '../../types/resume';
 
 interface ProfessionalSummaryEditorProps {
@@ -7,16 +7,42 @@ interface ProfessionalSummaryEditorProps {
 }
 
 const ProfessionalSummaryEditor: React.FC<ProfessionalSummaryEditorProps> = ({ data, onUpdate }) => {
+  const [localData, setLocalData] = useState<ProfessionalSummary>(data);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Update local state when data prop changes from parent
+  useEffect(() => {
+    setLocalData(data);
+  }, [data]);
+
   const handleChange = (value: string) => {
-    onUpdate({ content: value });
+    const newData = { content: value };
+    setLocalData(newData);
+    
+    // Debounce the parent update
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      onUpdate(newData);
+    }, 300);
   };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1 font-inter">Professional Summary</label>
         <textarea
-          value={data.content}
+          value={localData.content}
           onChange={(e) => handleChange(e.target.value)}
           rows={12}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-mono text-sm bg-white text-gray-900"

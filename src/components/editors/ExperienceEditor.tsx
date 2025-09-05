@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Experience } from '../../types/resume';
 
@@ -8,6 +8,34 @@ interface ExperienceEditorProps {
 }
 
 const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate }) => {
+  const [localData, setLocalData] = useState<Experience[]>(data);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Update local state when data prop changes from parent
+  useEffect(() => {
+    setLocalData(data);
+  }, [data]);
+
+  const updateWithDebounce = (newData: Experience[]) => {
+    setLocalData(newData);
+    
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
+    timeoutRef.current = setTimeout(() => {
+      onUpdate(newData);
+    }, 300);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
   const addExperience = () => {
     const newExp: Experience = {
       company: "",
@@ -17,47 +45,47 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate }) =
       technologies: "",
       achievements: [""]
     };
-    onUpdate([...data, newExp]);
+    updateWithDebounce([...localData, newExp]);
   };
 
   const removeExperience = (index: number) => {
-    onUpdate(data.filter((_, i) => i !== index));
+    updateWithDebounce(localData.filter((_, i) => i !== index));
   };
 
   const updateExperience = (index: number, field: keyof Experience, value: any) => {
-    const newData = data.map((exp, i) => 
+    const newData = localData.map((exp, i) => 
       i === index ? { ...exp, [field]: value } : exp
     );
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   const addAchievement = (expIndex: number) => {
-    const newData = data.map((exp, i) => 
+    const newData = localData.map((exp, i) => 
       i === expIndex ? { ...exp, achievements: [...exp.achievements, ""] } : exp
     );
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   const removeAchievement = (expIndex: number, achIndex: number) => {
-    const newData = data.map((exp, i) => 
+    const newData = localData.map((exp, i) => 
       i === expIndex ? { ...exp, achievements: exp.achievements.filter((_, j) => j !== achIndex) } : exp
     );
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   const updateAchievement = (expIndex: number, achIndex: number, value: string) => {
-    const newData = data.map((exp, i) => 
+    const newData = localData.map((exp, i) => 
       i === expIndex ? { 
         ...exp, 
         achievements: exp.achievements.map((ach, j) => j === achIndex ? value : ach)
       } : exp
     );
-    onUpdate(newData);
+    updateWithDebounce(newData);
   };
 
   return (
     <div className="space-y-6">
-      {data.map((exp, expIndex) => (
+      {localData.map((exp, expIndex) => (
         <div key={expIndex} className="border border-gray-200 rounded-lg p-4">
           <div className="flex justify-between items-center mb-4">
             <h4 className="font-semibold text-gray-800">Experience #{expIndex + 1}</h4>
