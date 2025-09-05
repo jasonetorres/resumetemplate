@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { PersonalInfo } from '../../types/resume';
 
 interface PersonalInfoEditorProps {
@@ -7,11 +7,8 @@ interface PersonalInfoEditorProps {
 }
 
 const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate }) => {
-  // Use data directly instead of local state to prevent focus issues
-
   const handleChange = (field: keyof PersonalInfo, value: string) => {
-    const newData = { ...data, [field]: value };
-    onUpdate(newData);
+    onUpdate({ ...data, [field]: value });
   };
 
   return (
@@ -99,4 +96,4 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate 
   );
 };
 
-export default React.memo(PersonalInfoEditor);
+export default PersonalInfoEditor;

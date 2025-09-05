@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { TechnicalSkills } from '../../types/resume';
 
 interface TechnicalSkillsEditorProps {
@@ -7,10 +7,8 @@ interface TechnicalSkillsEditorProps {
 }
 
 const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onUpdate }) => {
-
   const handleChange = (field: keyof TechnicalSkills, value: string) => {
-    const newData = { ...data, [field]: value };
-    onUpdate(newData);
+    onUpdate({ ...data, [field]: value });
   };
 
   return (
@@ -74,40 +72,8 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           placeholder="AWS Certified Solutions Architect - Professional"
         />
       </div>
-
-      <div className="space-y-4">
-        <div className="bg-gray-600 p-4 rounded-xl border-l-4" style={{ borderLeftColor: '#0044ff' }}>
-          <h4 className="font-semibold text-white mb-2 font-inter">🔥 2025 In-Demand Skills:</h4>
-          <div className="text-sm text-gray-300 space-y-2 font-inter">
-            <div><strong>AI/ML:</strong> Python, TensorFlow, PyTorch, LangChain, OpenAI API</div>
-            <div><strong>Cloud:</strong> AWS/Azure advanced services, Kubernetes, Terraform</div>
-            <div><strong>Security:</strong> Zero Trust, SIEM, Incident Response, Compliance</div>
-            <div><strong>DevOps:</strong> CI/CD, Infrastructure as Code, Monitoring</div>
-          </div>
-        </div>
-        
-        <div className="bg-red-900/30 p-4 rounded-xl border-l-4 border-red-400">
-          <h4 className="font-semibold text-red-300 mb-2 font-inter">❌ Skills That Hurt Your Chances:</h4>
-          <ul className="text-sm text-red-200 space-y-1 font-inter">
-            <li>• Entry-level certs if you have 5+ years experience</li>
-            <li>• Outdated technologies (unless specifically required)</li>
-            <li>• Skills not relevant to your target role</li>
-            <li>• Generic terms like "Microsoft Office"</li>
-          </ul>
-        </div>
-        
-        <div className="bg-yellow-900/30 p-4 rounded-xl border-l-4 border-yellow-400">
-          <h4 className="font-semibold text-yellow-300 mb-2 font-inter">🎯 ATS Optimization Strategy:</h4>
-          <ul className="text-sm text-yellow-200 space-y-1 font-inter">
-            <li>• Aim for 60%+ keyword match with job descriptions</li>
-            <li>• Use exact terminology from job postings</li>
-            <li>• Include both acronyms and full names (AWS & Amazon Web Services)</li>
-            <li>• Create role-specific resume versions</li>
-          </ul>
-        </div>
-      </div>
     </div>
   );
 };
 
-export default React.memo(TechnicalSkillsEditor);
+export default TechnicalSkillsEditor;

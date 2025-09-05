@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ProfessionalSummary } from '../../types/resume';
 
 interface ProfessionalSummaryEditorProps {
@@ -7,10 +7,8 @@ interface ProfessionalSummaryEditorProps {
 }
 
 const ProfessionalSummaryEditor: React.FC<ProfessionalSummaryEditorProps> = ({ data, onUpdate }) => {
-
   const handleChange = (value: string) => {
-    const newData = { content: value };
-    onUpdate(newData);
+    onUpdate({ content: value });
   };
 
   return (
@@ -58,4 +56,4 @@ const ProfessionalSummaryEditor: React.FC<ProfessionalSummaryEditorProps> = ({ d
   );
 };
 
-export default React.memo(ProfessionalSummaryEditor);
+export default ProfessionalSummaryEditor;
