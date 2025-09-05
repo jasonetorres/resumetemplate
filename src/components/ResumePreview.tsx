@@ -390,7 +390,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
         >
           <div className="mb-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 pb-2 border-b-2 flex-1" style={{ borderColor: '#0044ff' }}>
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 pb-2 border-b-2 border-black flex-1">
                 EDUCATION
               </h3>
               <button
