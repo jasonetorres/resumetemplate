@@ -120,6 +120,16 @@ function App() {
   // Add key to force re-render when switching tabs to prevent stale state
   const [componentKey, setComponentKey] = useState(0);
 
+  // Auto-sync personal info from resume to cover letter
+  const updateResumeData = (newResumeData: ResumeData) => {
+    setResumeData(newResumeData);
+    // Sync personal info to cover letter
+    setCoverLetterData(prev => ({
+      ...prev,
+      personalInfo: newResumeData.personalInfo
+    }));
+  };
+
   const generateCleanHTML = () => {
     const contentId = activeTab === 'resume' ? 'resume-content' : 'cover-letter-content';
     const printContent = document.getElementById(contentId);
@@ -270,15 +280,15 @@ function App() {
       <h1 class="text-3xl font-bold text-gray-900 mb-2">${data.personalInfo.name}</h1>
       <h2 class="text-xl text-gray-700 mb-4">${data.personalInfo.title}</h2>
       <div class="contact-info text-gray-600 text-sm">
-        <span>${data.personalInfo.email}</span>
+        <span><a href="mailto:${data.personalInfo.email}" style="color: inherit; text-decoration: none;">${data.personalInfo.email}</a></span>
         <span>▪</span>
-        <span>${data.personalInfo.phone}</span>
+        <span><a href="tel:${data.personalInfo.phone}" style="color: inherit; text-decoration: none;">${data.personalInfo.phone}</a></span>
         <span>▪</span>
-        <span>${data.personalInfo.website}</span>
+        <span><a href="${data.personalInfo.website.startsWith('http') ? data.personalInfo.website : 'https://' + data.personalInfo.website}" target="_blank" style="color: inherit; text-decoration: none;">${data.personalInfo.website}</a></span>
         <span>▪</span>
-        <span>${data.personalInfo.linkedin}</span>
+        <span><a href="https://${data.personalInfo.linkedin}" target="_blank" style="color: inherit; text-decoration: none;">${data.personalInfo.linkedin}</a></span>
         <span>▪</span>
-        <span>${data.personalInfo.github}</span>
+        <span><a href="https://${data.personalInfo.github}" target="_blank" style="color: inherit; text-decoration: none;">${data.personalInfo.github}</a></span>
       </div>
     </div>
 
@@ -913,7 +923,7 @@ ${data.personalInfo.name}
             {activeTab === 'resume' ? (
               <ResumePreview 
                 data={resumeData} 
-                onUpdate={setResumeData} 
+                onUpdate={updateResumeData} 
                 showGuidance={showGuidance} 
               />
             ) : (

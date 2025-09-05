@@ -65,18 +65,32 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
   const SectionWithGuidance: React.FC<{ 
     children: React.ReactNode; 
     guidance: React.ReactNode;
-  }> = ({ children, guidance }) => (
-    <div className={`${showGuidance ? 'space-y-6 lg:grid lg:grid-cols-1 xl:grid-cols-3 lg:gap-6 lg:space-y-0' : ''}`}>
-      <div className={showGuidance ? 'xl:col-span-2' : ''}>
+    sectionName: string;
+  }> = ({ children, guidance, sectionName }) => {
+    const [showSectionGuidance, setShowSectionGuidance] = useState(false);
+    
+    return (
+      <div className="space-y-4">
         {children}
+        {showGuidance && (
+          <div className="border-t border-gray-200 pt-4">
+            <button
+              onClick={() => setShowSectionGuidance(!showSectionGuidance)}
+              className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
+            >
+              <span>💡 Get tips for {sectionName}</span>
+              <span className={`transform transition-transform ${showSectionGuidance ? 'rotate-180' : ''}`}>▼</span>
+            </button>
+            {showSectionGuidance && (
+              <div className="mt-3 max-w-2xl">
+                {guidance}
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      {showGuidance && (
-        <div className="xl:col-span-1">
-          {guidance}
-        </div>
-      )}
-    </div>
-  );
+    );
+  };
 
   return (
     <div id="resume-content" className="max-w-4xl mx-auto bg-white rounded-lg p-4 sm:p-6 lg:p-8 shadow-lg">
@@ -88,7 +102,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
       )}
 
       {/* Personal Info */}
-      <SectionWithGuidance guidance={<PersonalInfoGuidance />}>
+      <SectionWithGuidance guidance={<PersonalInfoGuidance />} sectionName="Personal Info">
         <EditableSection
           title="Personal Information"
           isEditing={editingSection === 'personal'}
@@ -134,7 +148,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
       </SectionWithGuidance>
 
       {/* Professional Summary */}
-      <SectionWithGuidance guidance={<SummaryGuidance />}>
+      <SectionWithGuidance guidance={<SummaryGuidance />} sectionName="Professional Summary">
         <EditableSection
           title="Professional Summary"
           isEditing={editingSection === 'summary'}
@@ -170,7 +184,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
       </SectionWithGuidance>
 
       {/* Technical Skills */}
-      <SectionWithGuidance guidance={<SkillsGuidance />}>
+      <SectionWithGuidance guidance={<SkillsGuidance />} sectionName="Technical Skills">
         <EditableSection
           title="Technical Skills"
           isEditing={editingSection === 'skills'}
@@ -231,7 +245,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
       </SectionWithGuidance>
 
       {/* Professional Experience */}
-      <SectionWithGuidance guidance={<ExperienceGuidance />}>
+      <SectionWithGuidance guidance={<ExperienceGuidance />} sectionName="Experience">
         <EditableSection
           title="Professional Experience"
           isEditing={editingSection === 'experience'}
@@ -286,7 +300,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
       </SectionWithGuidance>
 
       {/* Projects */}
-      <SectionWithGuidance guidance={<ProjectsGuidance />}>
+      <SectionWithGuidance guidance={<ProjectsGuidance />} sectionName="Projects">
         <EditableSection
           title="Projects"
           isEditing={editingSection === 'projects'}
@@ -341,7 +355,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
       </SectionWithGuidance>
 
       {/* Education */}
-      <SectionWithGuidance guidance={<EducationGuidance />}>
+      <SectionWithGuidance guidance={<EducationGuidance />} sectionName="Education">
         <EditableSection
           title="Education"
           isEditing={editingSection === 'education'}
