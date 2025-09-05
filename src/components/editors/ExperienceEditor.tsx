@@ -65,7 +65,8 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
     const newData = localData.map((exp, i) => 
       i === expIndex ? { ...exp, achievements: exp.achievements.filter((_, j) => j !== achIndex) } : exp
     );
-    handleUpdate(newData);
+    setLocalData(newData);
+    onUpdate(newData);
   };
 
   const updateAchievement = (expIndex: number, achIndex: number, value: string) => {
