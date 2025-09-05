@@ -233,30 +233,40 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
             </div>
             <div className="space-y-2">
               <div className="space-y-3 sm:space-y-2">
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
-                  <div className="font-semibold text-gray-800">Languages:</div>
-                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.languages}</div>
-                </div>
+                {data.technicalSkills.languages && (
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
+                    <div className="font-semibold text-gray-800">Languages:</div>
+                    <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.languages}</div>
+                  </div>
+                )}
                 
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
-                  <div className="font-semibold text-gray-800">Frameworks & Libraries:</div>
-                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.frameworks}</div>
-                </div>
+                {data.technicalSkills.frameworks && (
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
+                    <div className="font-semibold text-gray-800">Frameworks & Libraries:</div>
+                    <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.frameworks}</div>
+                  </div>
+                )}
                 
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
-                  <div className="font-semibold text-gray-800">Tools & Platforms:</div>
-                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.tools}</div>
-                </div>
+                {data.technicalSkills.tools && (
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
+                    <div className="font-semibold text-gray-800">Tools & Platforms:</div>
+                    <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.tools}</div>
+                  </div>
+                )}
                 
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
-                  <div className="font-semibold text-gray-800">Methodologies:</div>
-                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.methodologies}</div>
-                </div>
+                {data.technicalSkills.methodologies && (
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
+                    <div className="font-semibold text-gray-800">Methodologies:</div>
+                    <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.methodologies}</div>
+                  </div>
+                )}
                 
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
-                  <div className="font-semibold text-gray-800">Certifications:</div>
-                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.certifications}</div>
-                </div>
+                {data.technicalSkills.certifications && (
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
+                    <div className="font-semibold text-gray-800">Certifications:</div>
+                    <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.certifications}</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

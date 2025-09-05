@@ -325,16 +325,11 @@ ${data.professionalSummary.content}
     <div class="mb-4">
       <h3 class="text-lg font-bold text-gray-900 mb-4">TECHNICAL SKILLS</h3>
       <div class="skills-grid text-sm">
-        <div>Languages:</div>
-        <div>${data.technicalSkills.languages}</div>
-        <div>Frameworks & Libraries:</div>
-        <div>${data.technicalSkills.frameworks}</div>
-        <div>Tools & Platforms:</div>
-        <div>${data.technicalSkills.tools}</div>
-        <div>Methodologies:</div>
-        <div>${data.technicalSkills.methodologies}</div>
-        <div>Certifications:</div>
-        <div>${data.technicalSkills.certifications}</div>
+        ${data.technicalSkills.languages ? `<div>Languages:</div><div>${data.technicalSkills.languages}</div>` : ''}
+        ${data.technicalSkills.frameworks ? `<div>Frameworks & Libraries:</div><div>${data.technicalSkills.frameworks}</div>` : ''}
+        ${data.technicalSkills.tools ? `<div>Tools & Platforms:</div><div>${data.technicalSkills.tools}</div>` : ''}
+        ${data.technicalSkills.methodologies ? `<div>Methodologies:</div><div>${data.technicalSkills.methodologies}</div>` : ''}
+        ${data.technicalSkills.certifications ? `<div>Certifications:</div><div>${data.technicalSkills.certifications}</div>` : ''}
       </div>
     </div>
 
@@ -553,26 +548,11 @@ ${data.professionalSummary.content}
 
     <h3>TECHNICAL SKILLS</h3>
     <table class="skills-table">
-      <tr>
-        <td>Languages:</td>
-        <td>${data.technicalSkills.languages}</td>
-      </tr>
-      <tr>
-        <td>Frameworks & Libraries:</td>
-        <td>${data.technicalSkills.frameworks}</td>
-      </tr>
-      <tr>
-        <td>Tools & Platforms:</td>
-        <td>${data.technicalSkills.tools}</td>
-      </tr>
-      <tr>
-        <td>Methodologies:</td>
-        <td>${data.technicalSkills.methodologies}</td>
-      </tr>
-      <tr>
-        <td>Certifications:</td>
-        <td>${data.technicalSkills.certifications}</td>
-      </tr>
+      ${data.technicalSkills.languages ? `<tr><td>Languages:</td><td>${data.technicalSkills.languages}</td></tr>` : ''}
+      ${data.technicalSkills.frameworks ? `<tr><td>Frameworks & Libraries:</td><td>${data.technicalSkills.frameworks}</td></tr>` : ''}
+      ${data.technicalSkills.tools ? `<tr><td>Tools & Platforms:</td><td>${data.technicalSkills.tools}</td></tr>` : ''}
+      ${data.technicalSkills.methodologies ? `<tr><td>Methodologies:</td><td>${data.technicalSkills.methodologies}</td></tr>` : ''}
+      ${data.technicalSkills.certifications ? `<tr><td>Certifications:</td><td>${data.technicalSkills.certifications}</td></tr>` : ''}
     </table>
 
     <h3>PROFESSIONAL EXPERIENCE</h3>
@@ -670,15 +650,11 @@ ${data.professionalSummary.content}
 TECHNICAL SKILLS
 ================================================================================
 
-Languages: ${data.technicalSkills.languages}
-
-Frameworks & Libraries: ${data.technicalSkills.frameworks}
-
-Tools & Platforms: ${data.technicalSkills.tools}
-
-Methodologies: ${data.technicalSkills.methodologies}
-
-Certifications: ${data.technicalSkills.certifications}
+${data.technicalSkills.languages ? `Languages: ${data.technicalSkills.languages}\n` : ''}
+${data.technicalSkills.frameworks ? `Frameworks & Libraries: ${data.technicalSkills.frameworks}\n` : ''}
+${data.technicalSkills.tools ? `Tools & Platforms: ${data.technicalSkills.tools}\n` : ''}
+${data.technicalSkills.methodologies ? `Methodologies: ${data.technicalSkills.methodologies}\n` : ''}
+${data.technicalSkills.certifications ? `Certifications: ${data.technicalSkills.certifications}\n` : ''}
 
 ================================================================================
 PROFESSIONAL EXPERIENCE
