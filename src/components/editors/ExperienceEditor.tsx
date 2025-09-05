@@ -206,7 +206,7 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate }) =
         <div className="bg-yellow-50 p-4 rounded-md border-l-4 border-yellow-400">
           <h4 className="font-semibold text-yellow-800 mb-2">📊 Numbers Beat Everything:</h4>
           <ul className="text-sm text-yellow-700 space-y-1">
-            <li>• Even small numbers > no numbers ("Improved by 5%" beats "Improved performance")</li>
+            <li>• Even small numbers &gt; no numbers ("Improved by 5%" beats "Improved performance")</li>
             <li>• Show leadership: "Mentored 4 developers", "Led team of 8"</li>
             <li>• Quantify impact: "Reduced costs by 40%", "Increased efficiency by 25%"</li>
             <li>• Show scale: "Processing 10M+ transactions daily"</li>
