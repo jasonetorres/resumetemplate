@@ -16,6 +16,10 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
     setLocalData(newData);
   };
 
+  const handleBlur = () => {
+    onUpdate(localData);
+  };
+
   const handleSave = () => {
     onUpdate(localData);
     onSave?.();

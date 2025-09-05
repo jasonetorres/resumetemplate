@@ -16,6 +16,10 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate,
     setLocalData(newData);
   };
 
+  const handleBlur = () => {
+    onUpdate(localData);
+  };
+
   const handleSave = () => {
     onUpdate(localData);
     onSave?.();
@@ -35,6 +39,7 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate,
             type="text"
             value={localData.name}
             onChange={(e) => handleChange('name', e.target.value)}
+            onBlur={handleBlur}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"
             style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
             placeholder="John D. Eveloper, BSc"
@@ -46,6 +51,7 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate,
             type="text"
             value={localData.title}
             onChange={(e) => handleChange('title', e.target.value)}
+            onBlur={handleBlur}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"
             style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
             placeholder="Senior Software Engineer"
@@ -57,6 +63,7 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate,
             type="email"
             value={localData.email}
             onChange={(e) => handleChange('email', e.target.value)}
+            onBlur={handleBlur}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"
             style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
             placeholder="your.email@example.com"
@@ -68,6 +75,7 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate,
             type="text"
             value={localData.phone}
             onChange={(e) => handleChange('phone', e.target.value)}
+            onBlur={handleBlur}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"
             style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
             placeholder="555-555-5555"
@@ -79,6 +87,7 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate,
             type="url"
             value={localData.website}
             onChange={(e) => handleChange('website', e.target.value)}
+            onBlur={handleBlur}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"
             style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
             placeholder="https://yourwebsite.com"
@@ -90,6 +99,7 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate,
             type="text"
             value={localData.linkedin}
             onChange={(e) => handleChange('linkedin', e.target.value)}
+            onBlur={handleBlur}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"
             style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
             placeholder="linkedin.com/in/yourprofile"
@@ -101,6 +111,7 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate,
             type="text"
             value={localData.github}
             onChange={(e) => handleChange('github', e.target.value)}
+            onBlur={handleBlur}
             className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-inter bg-white text-gray-900"
             style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
             placeholder="github.com/yourusername"
