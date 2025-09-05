@@ -25,28 +25,17 @@ interface ResumePreviewProps {
 
 const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuidance }) => {
   const [editingSection, setEditingSection] = useState<string | null>(null);
-  
-  // Use useRef to store original data to prevent re-renders
-  const originalDataRef = React.useRef<ResumeData | null>(null);
 
   const handleEdit = (section: string) => {
-    if (!originalDataRef.current) {
-      originalDataRef.current = JSON.parse(JSON.stringify(data)); // Deep copy
-    }
     setEditingSection(section);
   };
 
   const handleSave = () => {
     setEditingSection(null);
-    originalDataRef.current = null;
   };
 
   const handleCancel = () => {
-    if (originalDataRef.current) {
-      onUpdate(originalDataRef.current); // Revert to original data
-    }
     setEditingSection(null);
-    originalDataRef.current = null;
   };
 
   const handleUpdatePersonalInfo = (personalInfo: PersonalInfo) => {
