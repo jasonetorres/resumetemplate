@@ -67,7 +67,8 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
         description: project.description.filter((_, j) => j !== descIndex) 
       } : project
     );
-    handleUpdate(newData);
+    setLocalData(newData);
+    onUpdate(newData);
   };
 
   const updateDescription = (projectIndex: number, descIndex: number, value: string) => {
