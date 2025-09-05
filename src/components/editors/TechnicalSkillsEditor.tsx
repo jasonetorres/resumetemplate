@@ -38,11 +38,10 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           <label className="block text-sm font-medium text-gray-700 font-inter">Programming Languages</label>
           <button
             onClick={() => handleChange('languages', '')}
-            className="text-red-600 hover:text-red-700 text-sm flex items-center space-x-1"
+            className="text-red-600 hover:text-red-700"
             title="Remove this category"
           >
             <Minus className="w-3 h-3" />
-            <span>Remove</span>
           </button>
         </div>
         {localData.languages && (
@@ -63,11 +62,10 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           <label className="block text-sm font-medium text-gray-700 font-inter">Frameworks & Libraries</label>
           <button
             onClick={() => handleChange('frameworks', '')}
-            className="text-red-600 hover:text-red-700 text-sm flex items-center space-x-1"
+            className="text-red-600 hover:text-red-700"
             title="Remove this category"
           >
             <Minus className="w-3 h-3" />
-            <span>Remove</span>
           </button>
         </div>
         {localData.frameworks && (
@@ -88,11 +86,10 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           <label className="block text-sm font-medium text-gray-700 font-inter">Tools & Platforms</label>
           <button
             onClick={() => handleChange('tools', '')}
-            className="text-red-600 hover:text-red-700 text-sm flex items-center space-x-1"
+            className="text-red-600 hover:text-red-700"
             title="Remove this category"
           >
             <Minus className="w-3 h-3" />
-            <span>Remove</span>
           </button>
         </div>
         {localData.tools && (
@@ -113,11 +110,10 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           <label className="block text-sm font-medium text-gray-700 font-inter">Methodologies</label>
           <button
             onClick={() => handleChange('methodologies', '')}
-            className="text-red-600 hover:text-red-700 text-sm flex items-center space-x-1"
+            className="text-red-600 hover:text-red-700"
             title="Remove this category"
           >
             <Minus className="w-3 h-3" />
-            <span>Remove</span>
           </button>
         </div>
         {localData.methodologies && (
@@ -138,11 +134,10 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           <label className="block text-sm font-medium text-gray-700 font-inter">Certifications</label>
           <button
             onClick={() => handleChange('certifications', '')}
-            className="text-red-600 hover:text-red-700 text-sm flex items-center space-x-1"
+            className="text-red-600 hover:text-red-700"
             title="Remove this category"
           >
             <Minus className="w-3 h-3" />
-            <span>Remove</span>
           </button>
         </div>
         {localData.certifications && (
