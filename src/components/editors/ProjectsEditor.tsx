@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Project } from '../../types/resume';
 
@@ -180,4 +181,4 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate }) => {
   );
 };
 
-export default ProjectsEditor;
+export default React.memo(ProjectsEditor);

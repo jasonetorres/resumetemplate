@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Experience } from '../../types/resume';
 
@@ -217,4 +218,4 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate }) =
   );
 };
 
-export default ExperienceEditor;
+export default React.memo(ExperienceEditor);

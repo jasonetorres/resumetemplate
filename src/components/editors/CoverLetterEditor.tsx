@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ChevronDown } from 'lucide-react';
 import { CoverLetterData } from '../../types/resume';
 
@@ -246,4 +247,4 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
   );
 };
 
-export default CoverLetterEditor;
+export default React.memo(CoverLetterEditor);

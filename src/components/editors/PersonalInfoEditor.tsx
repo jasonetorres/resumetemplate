@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { PersonalInfo } from '../../types/resume';
 
 interface PersonalInfoEditorProps {
@@ -99,4 +100,4 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate 
   );
 };
 
-export default PersonalInfoEditor;
+export default React.memo(PersonalInfoEditor);

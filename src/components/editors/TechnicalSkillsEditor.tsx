@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { TechnicalSkills } from '../../types/resume';
 
 interface TechnicalSkillsEditorProps {
@@ -110,4 +111,4 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
   );
 };
 
-export default TechnicalSkillsEditor;
+export default React.memo(TechnicalSkillsEditor);
