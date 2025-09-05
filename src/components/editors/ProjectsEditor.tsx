@@ -21,6 +21,13 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
     setLocalData(data);
     onCancel?.();
   };
+
+  // Auto-save changes as user types
+  const handleUpdate = (newData: Project[]) => {
+    setLocalData(newData);
+    onUpdate(newData);
+  };
+
   const addProject = () => {
     const newProject: Project = {
       name: "",
@@ -29,25 +36,25 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
       description: [""],
       url: ""
     };
-setLocalData([...localData, newProject]);
+    handleUpdate([...localData, newProject]);
   };
 
   const removeProject = (index: number) => {
-    setLocalData(localData.filter((_, i) => i !== index));
+    handleUpdate(localData.filter((_, i) => i !== index));
   };
 
   const updateProject = (index: number, field: keyof Project, value: any) => {
     const newData = localData.map((project, i) => 
       i === index ? { ...project, [field]: value } : project
     );
-    setLocalData(newData);
+    handleUpdate(newData);
   };
 
   const addDescription = (projectIndex: number) => {
     const newData = localData.map((project, i) => 
       i === projectIndex ? { ...project, description: [...project.description, ""] } : project
     );
-    setLocalData(newData);
+    handleUpdate(newData);
   };
 
   const removeDescription = (projectIndex: number, descIndex: number) => {
@@ -57,7 +64,7 @@ setLocalData([...localData, newProject]);
         description: project.description.filter((_, j) => j !== descIndex) 
       } : project
     );
-    setLocalData(newData);
+    handleUpdate(newData);
   };
 
   const updateDescription = (projectIndex: number, descIndex: number, value: string) => {
@@ -67,7 +74,7 @@ setLocalData([...localData, newProject]);
         description: project.description.map((desc, j) => j === descIndex ? value : desc)
       } : project
     );
-    setLocalData(newData);
+    handleUpdate(newData);
   };
 
   return (

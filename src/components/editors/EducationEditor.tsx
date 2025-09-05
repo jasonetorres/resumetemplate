@@ -22,24 +22,30 @@ const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate, onSav
     onCancel?.();
   };
 
+  // Auto-save changes as user types
+  const handleUpdate = (newData: Education[]) => {
+    setLocalData(newData);
+    onUpdate(newData);
+  };
+
   const addEducation = () => {
     const newEdu: Education = {
       institution: "",
       degree: "",
       duration: ""
     };
-setLocalData([...localData, newEdu]);
+    handleUpdate([...localData, newEdu]);
   };
 
   const removeEducation = (index: number) => {
-    setLocalData(localData.filter((_, i) => i !== index));
+    handleUpdate(localData.filter((_, i) => i !== index));
   };
 
   const updateEducation = (index: number, field: keyof Education, value: string) => {
     const newData = localData.map((edu, i) => 
       i === index ? { ...edu, [field]: value } : edu
     );
-    setLocalData(newData);
+    handleUpdate(newData);
   };
 
   return (

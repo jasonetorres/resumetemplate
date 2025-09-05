@@ -21,6 +21,13 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
     setLocalData(data);
     onCancel?.();
   };
+
+  // Auto-save changes as user types
+  const handleUpdate = (newData: Experience[]) => {
+    setLocalData(newData);
+    onUpdate(newData);
+  };
+
   const addExperience = () => {
     const newExp: Experience = {
       company: "",
@@ -30,32 +37,32 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
       technologies: "",
       achievements: [""]
     };
-    setLocalData([...localData, newExp]);
+    handleUpdate([...localData, newExp]);
   };
 
   const removeExperience = (index: number) => {
-    setLocalData(localData.filter((_, i) => i !== index));
+    handleUpdate(localData.filter((_, i) => i !== index));
   };
 
   const updateExperience = (index: number, field: keyof Experience, value: any) => {
     const newData = localData.map((exp, i) => 
       i === index ? { ...exp, [field]: value } : exp
     );
-    setLocalData(newData);
+    handleUpdate(newData);
   };
 
   const addAchievement = (expIndex: number) => {
     const newData = localData.map((exp, i) => 
       i === expIndex ? { ...exp, achievements: [...exp.achievements, ""] } : exp
     );
-    setLocalData(newData);
+    handleUpdate(newData);
   };
 
   const removeAchievement = (expIndex: number, achIndex: number) => {
     const newData = localData.map((exp, i) => 
       i === expIndex ? { ...exp, achievements: exp.achievements.filter((_, j) => j !== achIndex) } : exp
     );
-    setLocalData(newData);
+    handleUpdate(newData);
   };
 
   const updateAchievement = (expIndex: number, achIndex: number, value: string) => {
@@ -65,7 +72,7 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
         achievements: exp.achievements.map((ach, j) => j === achIndex ? value : ach)
       } : exp
     );
-    setLocalData(newData);
+    handleUpdate(newData);
   };
 
   return (
