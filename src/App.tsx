@@ -315,13 +315,16 @@ function App() {
       </div>
     </div>
 
+    ${data.professionalSummary.content.trim() ? `
     <div class="mb-4">
       <h3 class="text-lg font-bold text-gray-900 mb-4">PROFESSIONAL SUMMARY</h3>
       <div class="text-gray-700 leading-relaxed whitespace-pre-line">
 ${data.professionalSummary.content}
       </div>
     </div>
+    ` : ''}
 
+    ${Object.values(data.technicalSkills).some(skill => skill.trim()) ? `
     <div class="mb-4">
       <h3 class="text-lg font-bold text-gray-900 mb-4">TECHNICAL SKILLS</h3>
       <div class="skills-grid text-sm">
@@ -332,7 +335,9 @@ ${data.professionalSummary.content}
         ${data.technicalSkills.certifications ? `<div>Certifications:</div><div>${data.technicalSkills.certifications}</div>` : ''}
       </div>
     </div>
+    ` : ''}
 
+    ${data.experience.length > 0 ? `
     <div class="mb-4 page-break-inside-avoid">
       <h3 class="text-lg font-bold text-gray-900 mb-4">PROFESSIONAL EXPERIENCE</h3>
       <div class="space-y-4">
@@ -352,6 +357,7 @@ ${data.professionalSummary.content}
         `).join('')}
       </div>
     </div>
+    ` : ''}
 
     ${data.projects.length > 0 ? `
     <div class="mb-4 page-break-inside-avoid">
@@ -543,9 +549,12 @@ ${data.professionalSummary.content}
       <a href="https://${data.personalInfo.github}" target="_blank">${data.personalInfo.github}</a>
     </div>
 
+    ${data.professionalSummary.content.trim() ? `
     <h3>PROFESSIONAL SUMMARY</h3>
     <p>${data.professionalSummary.content.replace(/\n/g, '<br>')}</p>
+    ` : ''}
 
+    ${Object.values(data.technicalSkills).some(skill => skill.trim()) ? `
     <h3>TECHNICAL SKILLS</h3>
     <table class="skills-table">
       ${data.technicalSkills.languages ? `<tr><td>Languages:</td><td>${data.technicalSkills.languages}</td></tr>` : ''}
@@ -554,7 +563,9 @@ ${data.professionalSummary.content}
       ${data.technicalSkills.methodologies ? `<tr><td>Methodologies:</td><td>${data.technicalSkills.methodologies}</td></tr>` : ''}
       ${data.technicalSkills.certifications ? `<tr><td>Certifications:</td><td>${data.technicalSkills.certifications}</td></tr>` : ''}
     </table>
+    ` : ''}
 
+    ${data.experience.length > 0 ? `
     <h3>PROFESSIONAL EXPERIENCE</h3>
     ${data.experience.map(exp => `
       <h4>${exp.company} | ${exp.location}</h4>
@@ -564,6 +575,7 @@ ${data.professionalSummary.content}
         ${exp.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
       </ul>
     `).join('')}
+    ` : ''}
 
     ${data.projects.length > 0 ? `
     <h3>PROJECTS</h3>
@@ -577,11 +589,13 @@ ${data.professionalSummary.content}
     `).join('')}
     ` : ''}
 
+    ${data.education.length > 0 ? `
     <h3>EDUCATION</h3>
     ${data.education.map(edu => `
       <h4>${edu.institution} | ${edu.duration}</h4>
       <p>${edu.degree}</p>
     `).join('')}
+    ` : ''}
   `;
 
   const generateCoverLetterWordContent = (data: CoverLetterData) => `
@@ -640,12 +654,15 @@ Website: ${data.personalInfo.website}
 LinkedIn: ${data.personalInfo.linkedin}
 GitHub: ${data.personalInfo.github}
 
+${data.professionalSummary.content.trim() ? `
 ================================================================================
 PROFESSIONAL SUMMARY
 ================================================================================
 
 ${data.professionalSummary.content}
+` : ''}
 
+${Object.values(data.technicalSkills).some(skill => skill.trim()) ? `
 ================================================================================
 TECHNICAL SKILLS
 ================================================================================
@@ -655,7 +672,9 @@ ${data.technicalSkills.frameworks ? `Frameworks & Libraries: ${data.technicalSki
 ${data.technicalSkills.tools ? `Tools & Platforms: ${data.technicalSkills.tools}\n` : ''}
 ${data.technicalSkills.methodologies ? `Methodologies: ${data.technicalSkills.methodologies}\n` : ''}
 ${data.technicalSkills.certifications ? `Certifications: ${data.technicalSkills.certifications}\n` : ''}
+` : ''}
 
+${data.experience.length > 0 ? `
 ================================================================================
 PROFESSIONAL EXPERIENCE
 ================================================================================
@@ -667,6 +686,7 @@ Technologies: ${exp.technologies}
 
 ${exp.achievements.map(achievement => `• ${achievement}`).join('\n')}
 `).join('\n')}
+` : ''}
 
 ${data.projects.length > 0 ? `
 ================================================================================
