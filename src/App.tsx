@@ -265,13 +265,23 @@ function App() {
                   font-size: 12px;
                 }
                 h3 { page-break-after: avoid; }
-                .mb-8 { margin-bottom: 12px; }
-                .mb-6 { margin-bottom: 8px; }
-                .mb-4 { margin-bottom: 6px; }
-                .mb-2 { margin-bottom: 4px; }
-                .space-y-5 > * + * { margin-top: 8px; }
-                .space-y-4 > * + * { margin-top: 6px; }
-                .space-y-2 > * + * { margin-top: 4px; }
+                .mb-8 { margin-bottom: 8px !important; }
+                .mb-6 { margin-bottom: 6px !important; }
+                .mb-4 { margin-bottom: 4px !important; }
+                .mb-2 { margin-bottom: 2px !important; }
+                .mt-1 { margin-top: 2px !important; }
+                .space-y-5 > * + * { margin-top: 4px !important; }
+                .space-y-4 > * + * { margin-top: 3px !important; }
+                .space-y-2 > * + * { margin-top: 2px !important; }
+                h1 { margin-bottom: 4px !important; }
+                h2 { margin-bottom: 6px !important; }
+                h3 { margin: 8px 0 4px 0 !important; }
+                h4 { margin-bottom: 2px !important; }
+                p { margin-bottom: 3px !important; }
+                ul { margin: 3px 0 !important; }
+                li { margin-bottom: 1px !important; }
+                .contact-info { margin-bottom: 8px !important; }
+                .skills-grid { gap: 8px !important; }
                 .page-break-inside-avoid {
                   page-break-inside: avoid;
                   break-inside: avoid;
