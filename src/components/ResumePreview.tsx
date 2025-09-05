@@ -67,23 +67,42 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
     guidance: React.ReactNode;
     sectionName: string;
   }> = ({ children, guidance, sectionName }) => {
-    const [showSectionGuidance, setShowSectionGuidance] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     
     return (
       <div className="space-y-4">
         {children}
         {showGuidance && (
-          <div className="border-t border-gray-200 pt-4">
+          <div className="border-t border-gray-200 pt-3">
             <button
-              onClick={() => setShowSectionGuidance(!showSectionGuidance)}
-              className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
+              onClick={() => setShowModal(true)}
+              className="inline-flex items-center space-x-2 px-3 py-2 text-white rounded-lg text-sm font-medium transition-all duration-200 hover:opacity-90"
+              style={{ backgroundColor: '#0044ff' }}
             >
-              <span>💡 Get tips for {sectionName}</span>
-              <span className={`transform transition-transform ${showSectionGuidance ? 'rotate-180' : ''}`}>▼</span>
+              <span>💡 Tips for {sectionName}</span>
             </button>
-            {showSectionGuidance && (
-              <div className="mt-3 max-w-2xl">
-                {guidance}
+            
+            {/* Modal */}
+            {showModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                  <div className="p-6 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xl font-bold text-gray-900">Tips for {sectionName}</h3>
+                      <button
+                        onClick={() => setShowModal(false)}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    {guidance}
+                  </div>
+                </div>
               </div>
             )}
           </div>

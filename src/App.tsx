@@ -159,6 +159,10 @@ function App() {
                 padding: 40px;
                 background: white;
               }
+              .page-break-inside-avoid {
+                page-break-inside: avoid;
+                break-inside: avoid;
+              }
               h1 { 
                 font-size: 32px; 
                 font-weight: bold; 
@@ -257,12 +261,16 @@ function App() {
               @media print {
                 body { 
                   margin: 0; 
-                  padding: 0.5in; 
+                  padding: 0.75in; 
                   font-size: 12px;
                 }
                 h3 { page-break-after: avoid; }
                 .mb-8 { margin-bottom: 20px; }
                 .mb-6 { margin-bottom: 16px; }
+                .page-break-inside-avoid {
+                  page-break-inside: avoid;
+                  break-inside: avoid;
+                }
               }
             </style>
           </head>
@@ -315,11 +323,11 @@ ${data.professionalSummary.content}
       </div>
     </div>
 
-    <div class="mb-6">
+    <div class="mb-6 page-break-inside-avoid">
       <h3 class="text-lg font-bold text-gray-900 mb-4">PROFESSIONAL EXPERIENCE</h3>
       <div class="space-y-5">
         ${data.experience.map(exp => `
-          <div>
+          <div class="page-break-inside-avoid">
             <div class="mb-2">
               <h4 class="font-bold text-gray-900">${exp.company} | ${exp.location}</h4>
               <div class="text-gray-700">${exp.position} | ${exp.duration}</div>
@@ -336,11 +344,11 @@ ${data.professionalSummary.content}
     </div>
 
     ${data.projects.length > 0 ? `
-    <div class="mb-6">
+    <div class="mb-6 page-break-inside-avoid">
       <h3 class="text-lg font-bold text-gray-900 mb-4">PROJECTS</h3>
       <div class="space-y-4">
         ${data.projects.map(project => `
-          <div>
+          <div class="page-break-inside-avoid">
             <div class="mb-2">
               <h4 class="font-bold text-gray-900">${project.name} | ${project.duration}</h4>
               <div class="text-sm italic" style="color: #0044ff;">
@@ -352,7 +360,7 @@ ${data.professionalSummary.content}
             </ul>
             ${project.url ? `
               <div class="text-sm mt-1" style="color: #0044ff;">
-                URL: ${project.url}
+                URL: <a href="${project.url.startsWith('http') ? project.url : 'https://' + project.url}" target="_blank" style="color: #0044ff; text-decoration: underline;">${project.url}</a>
               </div>
             ` : ''}
           </div>
@@ -378,9 +386,9 @@ ${data.professionalSummary.content}
     <div class="mb-8">
       <div class="text-right mb-6">
         <div class="text-gray-900 font-semibold">${data.personalInfo.name}</div>
-        <div class="text-gray-700">${data.personalInfo.email}</div>
-        <div class="text-gray-700">${data.personalInfo.phone}</div>
-        <div class="text-gray-700">${data.personalInfo.linkedin}</div>
+        <div class="text-gray-700"><a href="mailto:${data.personalInfo.email}" style="color: inherit; text-decoration: none;">${data.personalInfo.email}</a></div>
+        <div class="text-gray-700"><a href="tel:${data.personalInfo.phone}" style="color: inherit; text-decoration: none;">${data.personalInfo.phone}</a></div>
+        <div class="text-gray-700"><a href="https://${data.personalInfo.linkedin}" target="_blank" style="color: inherit; text-decoration: none;">${data.personalInfo.linkedin}</a></div>
       </div>
       
       <div class="mb-6">
@@ -435,7 +443,7 @@ ${data.professionalSummary.content}
               font-family: 'Times New Roman', serif; 
               font-size: 12pt; 
               line-height: 1.5; 
-              margin: 1in;
+              margin: 0.75in;
               color: black;
             }
             h1 { 
@@ -516,8 +524,11 @@ ${data.professionalSummary.content}
     <h1>${data.personalInfo.name}</h1>
     <h2>${data.personalInfo.title}</h2>
     <div class="contact-info">
-      ${data.personalInfo.email} • ${data.personalInfo.phone} • ${data.personalInfo.website}<br>
-      ${data.personalInfo.linkedin} • ${data.personalInfo.github}
+      <a href="mailto:${data.personalInfo.email}">${data.personalInfo.email}</a> • 
+      <a href="tel:${data.personalInfo.phone}">${data.personalInfo.phone}</a> • 
+      <a href="${data.personalInfo.website.startsWith('http') ? data.personalInfo.website : 'https://' + data.personalInfo.website}" target="_blank">${data.personalInfo.website}</a><br>
+      <a href="https://${data.personalInfo.linkedin}" target="_blank">${data.personalInfo.linkedin}</a> • 
+      <a href="https://${data.personalInfo.github}" target="_blank">${data.personalInfo.github}</a>
     </div>
 
     <h3>PROFESSIONAL SUMMARY</h3>
@@ -565,7 +576,7 @@ ${data.professionalSummary.content}
       <ul>
         ${project.description.map(desc => `<li>${desc}</li>`).join('')}
       </ul>
-      ${project.url ? `<p><strong>URL:</strong> ${project.url}</p>` : ''}
+      ${project.url ? `<p><strong>URL:</strong> <a href="${project.url.startsWith('http') ? project.url : 'https://' + project.url}" target="_blank">${project.url}</a></p>` : ''}
     `).join('')}
     ` : ''}
 
@@ -579,9 +590,9 @@ ${data.professionalSummary.content}
   const generateCoverLetterWordContent = (data: CoverLetterData) => `
     <div style="text-align: right; margin-bottom: 24pt;">
       <p><strong>${data.personalInfo.name}</strong><br>
-      ${data.personalInfo.email}<br>
-      ${data.personalInfo.phone}<br>
-      ${data.personalInfo.linkedin}</p>
+      <a href="mailto:${data.personalInfo.email}">${data.personalInfo.email}</a><br>
+      <a href="tel:${data.personalInfo.phone}">${data.personalInfo.phone}</a><br>
+      <a href="https://${data.personalInfo.linkedin}" target="_blank">${data.personalInfo.linkedin}</a></p>
     </div>
     
     <p>${data.recipientInfo.date}</p>

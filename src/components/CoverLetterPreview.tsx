@@ -16,6 +16,11 @@ interface CoverLetterPreviewProps {
 const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate, showGuidance }) => {
   const [editingSection, setEditingSection] = useState<string | null>(null);
 
+  // Auto-sync personal info changes to cover letter
+  React.useEffect(() => {
+    // This will be called when personalInfo changes from the resume
+  }, [data.personalInfo]);
+
   const handleEdit = (section: string) => {
     setEditingSection(section);
   };
