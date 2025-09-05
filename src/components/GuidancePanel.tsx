@@ -38,21 +38,25 @@ const GuidancePanel: React.FC = () => {
       </div>
 
       {/* Professional Summary Guide */}
-      <div className="bg-gray-100 rounded-2xl shadow-md p-6 border-l-4 border-gray-800 cursor-pointer hover:shadow-lg transition-all duration-200" onClick={() => toggleCard('summary')}>
-        <h4 className="font-bold text-gray-900 mb-3 flex items-center justify-between font-inter">
+      <div 
+        className="bg-gray-700 rounded-2xl shadow-md p-6 border-l-4 cursor-pointer hover:shadow-lg transition-all duration-200"
+        style={{ borderLeftColor: '#0044ff' }}
+        onClick={() => toggleCard('summary')}
+      >
+        <h4 className="font-bold text-white mb-3 flex items-center justify-between font-inter">
           <div className="flex items-center space-x-2">
-            <Target className="w-4 h-4 text-gray-800" />
+            <Target className="w-4 h-4" style={{ color: '#0044ff' }} />
             <span>Professional Summary</span>
           </div>
-          <span className="text-sm text-gray-700">Click to expand</span>
+          <span className="text-sm" style={{ color: '#0044ff' }}>Click to expand</span>
         </h4>
-        <div className="text-sm text-gray-700 space-y-2 font-inter">
-          <p className="font-semibold text-gray-900">Your "Mini Cover Letter" - Most Important Section!</p>
+        <div className="text-sm text-gray-300 space-y-2 font-inter">
+          <p className="font-semibold" style={{ color: '#0044ff' }}>Your "Mini Cover Letter" - Most Important Section!</p>
           {expandedCard === 'summary' ? (
             <div className="space-y-3 mt-4">
-              <div className="bg-gray-200 p-3 rounded-xl">
+              <div className="bg-blue-900/30 p-3 rounded-xl">
                 <p className="font-semibold mb-2 font-inter" style={{ color: '#0044ff' }}>🎯 The Formula That Works:</p>
-                <ol className="list-decimal list-inside space-y-1 text-gray-800 font-inter">
+                <ol className="list-decimal list-inside space-y-1 text-blue-200 font-inter">
                   <li><strong>Experience:</strong> "X+ years of professional experience as [Role] in [Industry]"</li>
                   <li><strong>Primary Skills:</strong> Your main technical competencies</li>
                   <li><strong>Secondary Skills:</strong> What makes you unique</li>
@@ -146,7 +150,7 @@ const GuidancePanel: React.FC = () => {
                   <p className="text-sm italic">Example: "Architected microservices using Docker/K8s, reducing deployment time by 60%"</p>
                 </div>
               </div>
-              <div className="bg-red-900/30 p-3 rounded">
+              <div className="bg-green-900/30 p-3 rounded">
                 <p className="font-semibold text-red-300 mb-2">❌ Avoid These "Fluff Words":</p>
                 <div className="text-red-200 text-sm space-y-2">
                   <p>These words make you sound passive and get filtered out by ATS:</p>
@@ -298,7 +302,7 @@ const GuidancePanel: React.FC = () => {
                   <div><strong>Specialized:</strong> SIEM, Zero Trust, Kubernetes (CKA)</div>
                 </div>
               </div>
-              <div className="bg-red-900/30 p-3 rounded border-l-4 border-red-400">
+              <div className="bg-gray-200 p-3 rounded border-l-4 border-gray-600">
                 <p className="font-semibold text-red-300 mb-2">🚫 Remove These (They Make You Look Junior):</p>
                 <ul className="list-disc list-inside space-y-1 text-red-200">
                   <li>AWS Cloud Practitioner (if you have 5+ years)</li>
