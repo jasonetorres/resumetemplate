@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { CoverLetterData } from '../../types/resume';
 
@@ -9,7 +9,6 @@ interface CoverLetterEditorProps {
 
 const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate }) => {
   const [showTemplates, setShowTemplates] = useState(false);
-
 
   const handleRecipientChange = (field: keyof typeof data.recipientInfo, value: string) => {
     const newData = {
@@ -246,4 +245,4 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
   );
 };
 
-export default React.memo(CoverLetterEditor);
+export default CoverLetterEditor;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Education } from '../../types/resume';
 
@@ -107,4 +107,4 @@ const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate }) => 
   );
 };
 
-export default React.memo(EducationEditor);
+export default EducationEditor;
