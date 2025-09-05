@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Minus } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { TechnicalSkills } from '../../types/resume';
 
 interface TechnicalSkillsEditorProps {
@@ -26,6 +26,13 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
     setLocalData(newData);
     onUpdate(newData);
   };
+
+  const addCategory = (field: keyof TechnicalSkills) => {
+    const newData = { ...localData, [field]: '' };
+    setLocalData(newData);
+    onUpdate(newData);
+  };
+
   const handleSave = () => {
     onUpdate(localData);
     onSave?.();
@@ -36,127 +43,81 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
     onCancel?.();
   };
 
+  const categoryLabels = {
+    languages: 'Programming Languages',
+    frameworks: 'Frameworks & Libraries',
+    tools: 'Tools & Platforms',
+    methodologies: 'Methodologies',
+    certifications: 'Certifications'
+  };
+
+  const categoryPlaceholders = {
+    languages: 'Python, JavaScript, TypeScript, Java, SQL, Go',
+    frameworks: 'Django, Flask, React, Node.js, Spring Boot',
+    tools: 'AWS (EC2, S3, Lambda, RDS), Docker, Kubernetes, Jenkins, Git',
+    methodologies: 'Agile, Scrum, Kanban, Test-Driven Development (TDD), CI/CD',
+    certifications: 'AWS Certified Solutions Architect - Professional'
+  };
+
   return (
     <div className="space-y-4">
-      <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className="block text-sm font-medium text-gray-700 font-inter">Programming Languages</label>
-          <button
-            onClick={() => removeCategory('languages')}
-            className="text-red-600 hover:text-red-700"
-            title="Remove this category"
-          >
-            <Minus className="w-3 h-3" />
-          </button>
-        </div>
-        {localData.languages && (
-          <input
-            type="text"
-            value={localData.languages}
-            onChange={(e) => handleChange('languages', e.target.value)}
-            onBlur={handleBlur}
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
-            style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
-            placeholder="Python, JavaScript, TypeScript, Java, SQL, Go"
-          />
-        )}
-      </div>
+      {/* Render existing categories */}
+      {Object.entries(categoryLabels).map(([key, label]) => {
+        const fieldKey = key as keyof TechnicalSkills;
+        const hasContent = localData[fieldKey];
+        
+        if (!hasContent) return null;
+        
+        return (
+          <div key={key}>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm font-medium text-gray-700 font-inter">{label}</label>
+              <button
+                onClick={() => removeCategory(fieldKey)}
+                className="text-red-600 hover:text-red-700"
+                title="Remove this category"
+              >
+                <Minus className="w-3 h-3" />
+              </button>
+            </div>
+            <input
+              type="text"
+              value={localData[fieldKey]}
+              onChange={(e) => handleChange(fieldKey, e.target.value)}
+              onBlur={handleBlur}
+              className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
+              style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
+              placeholder={categoryPlaceholders[fieldKey]}
+            />
+          </div>
+        );
+      })}
 
-      <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className="block text-sm font-medium text-gray-700 font-inter">Frameworks & Libraries</label>
-          <button
-            onClick={() => removeCategory('frameworks')}
-            className="text-red-600 hover:text-red-700"
-            title="Remove this category"
-          >
-            <Minus className="w-3 h-3" />
-          </button>
+      {/* Add missing categories */}
+      {Object.entries(categoryLabels).some(([key]) => !localData[key as keyof TechnicalSkills]) && (
+        <div className="border-t border-gray-200 pt-4">
+          <h4 className="text-sm font-medium text-gray-700 mb-2 font-inter">Add Categories:</h4>
+          <div className="flex flex-wrap gap-2">
+            {Object.entries(categoryLabels).map(([key, label]) => {
+              const fieldKey = key as keyof TechnicalSkills;
+              const hasContent = localData[fieldKey];
+              
+              if (hasContent) return null;
+              
+              return (
+                <button
+                  key={key}
+                  onClick={() => addCategory(fieldKey)}
+                  className="flex items-center space-x-1 px-3 py-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors text-sm font-inter"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>{label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-        {localData.frameworks && (
-          <input
-            type="text"
-            value={localData.frameworks}
-            onChange={(e) => handleChange('frameworks', e.target.value)}
-            onBlur={handleBlur}
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
-            style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
-            placeholder="Django, Flask, React, Node.js, Spring Boot"
-          />
-        )}
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className="block text-sm font-medium text-gray-700 font-inter">Tools & Platforms</label>
-          <button
-            onClick={() => removeCategory('tools')}
-            className="text-red-600 hover:text-red-700"
-            title="Remove this category"
-          >
-            <Minus className="w-3 h-3" />
-          </button>
-        </div>
-        {localData.tools && (
-          <input
-            type="text"
-            value={localData.tools}
-            onChange={(e) => handleChange('tools', e.target.value)}
-            onBlur={handleBlur}
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
-            style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
-            placeholder="AWS (EC2, S3, Lambda, RDS), Docker, Kubernetes, Jenkins, Git"
-          />
-        )}
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className="block text-sm font-medium text-gray-700 font-inter">Methodologies</label>
-          <button
-            onClick={() => removeCategory('methodologies')}
-            className="text-red-600 hover:text-red-700"
-            title="Remove this category"
-          >
-            <Minus className="w-3 h-3" />
-          </button>
-        </div>
-        {localData.methodologies && (
-          <input
-            type="text"
-            value={localData.methodologies}
-            onChange={(e) => handleChange('methodologies', e.target.value)}
-            onBlur={handleBlur}
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
-            style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
-            placeholder="Agile, Scrum, Kanban, Test-Driven Development (TDD), CI/CD"
-          />
-        )}
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-1">
-          <label className="block text-sm font-medium text-gray-700 font-inter">Certifications</label>
-          <button
-            onClick={() => removeCategory('certifications')}
-            className="text-red-600 hover:text-red-700"
-            title="Remove this category"
-          >
-            <Minus className="w-3 h-3" />
-          </button>
-        </div>
-        {localData.certifications && (
-          <input
-            type="text"
-            value={localData.certifications}
-            onChange={(e) => handleChange('certifications', e.target.value)}
-            onBlur={handleBlur}
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
-            style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
-            placeholder="AWS Certified Solutions Architect - Professional"
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 };
