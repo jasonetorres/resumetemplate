@@ -25,52 +25,41 @@ interface ResumePreviewProps {
 
 const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuidance }) => {
   const [editingSection, setEditingSection] = useState<string | null>(null);
-  const [tempData, setTempData] = useState<ResumeData>(data);
-
-  // Update temp data when props change and not editing
-  React.useEffect(() => {
-    if (!editingSection) {
-      setTempData(data);
-    }
-  }, [data, editingSection]);
 
   const handleEdit = (section: string) => {
-    setTempData(data); // Store current data as temp
     setEditingSection(section);
   };
 
   const handleSave = () => {
-    onUpdate(tempData); // Save temp data to parent
     setEditingSection(null);
   };
 
   const handleCancel = () => {
-    setTempData(data); // Reset temp data to original
     setEditingSection(null);
   };
 
   const handleUpdatePersonalInfo = (personalInfo: PersonalInfo) => {
-    setTempData({ ...tempData, personalInfo });
+    onUpdate({ ...data, personalInfo });
   };
 
   const handleUpdateSummary = (professionalSummary: ProfessionalSummary) => {
-    setTempData({ ...tempData, professionalSummary });
+    onUpdate({ ...data, professionalSummary });
   };
 
   const handleUpdateSkills = (technicalSkills: TechnicalSkills) => {
-    setTempData({ ...tempData, technicalSkills });
+    onUpdate({ ...data, technicalSkills });
   };
 
   const handleUpdateExperience = (experience: Experience[]) => {
-    setTempData({ ...tempData, experience });
+    onUpdate({ ...data, experience });
   };
 
   const handleUpdateProjects = (projects: Project[]) => {
-    setTempData({ ...tempData, projects });
+    onUpdate({ ...data, projects });
   };
 
   const handleUpdateEducation = (education: Education[]) => {
-    setTempData({ ...tempData, education });
+    onUpdate({ ...data, education });
   };
 
   const SectionWithGuidance: React.FC<{ 
@@ -108,14 +97,14 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
           onCancel={handleCancel}
           editor={
             <PersonalInfoEditor
-              data={tempData.personalInfo}
+              data={data.personalInfo}
               onUpdate={handleUpdatePersonalInfo}
             />
           }
         >
           <div className="text-center mb-6 sm:mb-8">
             <div className="flex items-center justify-center mb-2">
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 text-center">{tempData.personalInfo.name}</h1>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 text-center">{data.personalInfo.name}</h1>
               <button
                 onClick={() => handleEdit('personal')}
                 className="ml-2 sm:ml-3 flex items-center space-x-1 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-all duration-200"
@@ -125,19 +114,19 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
                 <span className="hidden sm:inline">Edit</span>
               </button>
             </div>
-            <h2 className="text-lg sm:text-xl text-gray-700 mb-3 sm:mb-4">{tempData.personalInfo.title}</h2>
+            <h2 className="text-lg sm:text-xl text-gray-700 mb-3 sm:mb-4">{data.personalInfo.title}</h2>
             <div className="text-gray-600 text-xs sm:text-sm">
               <div className="flex flex-wrap justify-center items-center gap-1 sm:gap-2">
-                <span className="break-all">{tempData.personalInfo.email}</span>
+                <span className="break-all">{data.personalInfo.email}</span>
                 <span className="hidden sm:inline">▪</span>
-                <span>{tempData.personalInfo.phone}</span>
+                <span>{data.personalInfo.phone}</span>
               </div>
               <div className="flex flex-wrap justify-center items-center gap-1 sm:gap-2 mt-1">
-                <span className="break-all">{tempData.personalInfo.website}</span>
+                <span className="break-all">{data.personalInfo.website}</span>
                 <span className="hidden sm:inline">▪</span>
-                <span className="break-all">{tempData.personalInfo.linkedin}</span>
+                <span className="break-all">{data.personalInfo.linkedin}</span>
                 <span className="hidden sm:inline">▪</span>
-                <span className="break-all">{tempData.personalInfo.github}</span>
+                <span className="break-all">{data.personalInfo.github}</span>
               </div>
             </div>
           </div>
@@ -154,7 +143,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
           onCancel={handleCancel}
           editor={
             <ProfessionalSummaryEditor
-              data={tempData.professionalSummary}
+              data={data.professionalSummary}
               onUpdate={handleUpdateSummary}
             />
           }
@@ -174,7 +163,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               </button>
             </div>
             <div className="text-gray-700 leading-relaxed whitespace-pre-line text-sm sm:text-base">
-              {tempData.professionalSummary.content}
+              {data.professionalSummary.content}
             </div>
           </div>
         </EditableSection>
@@ -190,7 +179,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
           onCancel={handleCancel}
           editor={
             <TechnicalSkillsEditor
-              data={tempData.technicalSkills}
+              data={data.technicalSkills}
               onUpdate={handleUpdateSkills}
             />
           }
@@ -213,27 +202,27 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               <div className="space-y-3 sm:space-y-2">
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
                   <div className="font-semibold text-gray-800">Languages:</div>
-                  <div className="sm:col-span-3 text-gray-700">{tempData.technicalSkills.languages}</div>
+                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.languages}</div>
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
                   <div className="font-semibold text-gray-800">Frameworks & Libraries:</div>
-                  <div className="sm:col-span-3 text-gray-700">{tempData.technicalSkills.frameworks}</div>
+                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.frameworks}</div>
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
                   <div className="font-semibold text-gray-800">Tools & Platforms:</div>
-                  <div className="sm:col-span-3 text-gray-700">{tempData.technicalSkills.tools}</div>
+                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.tools}</div>
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
                   <div className="font-semibold text-gray-800">Methodologies:</div>
-                  <div className="sm:col-span-3 text-gray-700">{tempData.technicalSkills.methodologies}</div>
+                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.methodologies}</div>
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 sm:gap-4 text-xs sm:text-sm">
                   <div className="font-semibold text-gray-800">Certifications:</div>
-                  <div className="sm:col-span-3 text-gray-700">{tempData.technicalSkills.certifications}</div>
+                  <div className="sm:col-span-3 text-gray-700">{data.technicalSkills.certifications}</div>
                 </div>
               </div>
             </div>
@@ -251,7 +240,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
           onCancel={handleCancel}
           editor={
             <ExperienceEditor
-              data={tempData.experience}
+              data={data.experience}
               onUpdate={handleUpdateExperience}
             />
           }
@@ -271,7 +260,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               </button>
             </div>
             <div className="space-y-4 sm:space-y-5">
-              {tempData.experience.map((exp, index) => (
+              {data.experience.map((exp, index) => (
                 <div key={index}>
                   <div className="mb-2">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
@@ -306,7 +295,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
           onCancel={handleCancel}
           editor={
             <ProjectsEditor
-              data={tempData.projects}
+              data={data.projects}
               onUpdate={handleUpdateProjects}
             />
           }
@@ -326,7 +315,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               </button>
             </div>
             <div className="space-y-4">
-              {tempData.projects.map((project, index) => (
+              {data.projects.map((project, index) => (
                 <div key={index}>
                   <div className="mb-2">
                     <h4 className="font-bold text-gray-900 text-sm sm:text-base">{project.name} | {project.duration}</h4>
@@ -361,7 +350,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
           onCancel={handleCancel}
           editor={
             <EducationEditor
-              data={tempData.education}
+              data={data.education}
               onUpdate={handleUpdateEducation}
             />
           }
@@ -381,7 +370,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               </button>
             </div>
             <div className="space-y-2">
-              {tempData.education.map((edu, index) => (
+              {data.education.map((edu, index) => (
                 <div key={index}>
                   <h4 className="font-bold text-gray-900 text-sm sm:text-base">{edu.institution} | {edu.duration}</h4>
                   <div className="text-gray-700 text-sm sm:text-base">{edu.degree}</div>
