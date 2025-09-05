@@ -265,8 +265,13 @@ function App() {
                   font-size: 12px;
                 }
                 h3 { page-break-after: avoid; }
-                .mb-8 { margin-bottom: 20px; }
-                .mb-6 { margin-bottom: 16px; }
+                .mb-8 { margin-bottom: 12px; }
+                .mb-6 { margin-bottom: 8px; }
+                .mb-4 { margin-bottom: 6px; }
+                .mb-2 { margin-bottom: 4px; }
+                .space-y-5 > * + * { margin-top: 8px; }
+                .space-y-4 > * + * { margin-top: 6px; }
+                .space-y-2 > * + * { margin-top: 4px; }
                 .page-break-inside-avoid {
                   page-break-inside: avoid;
                   break-inside: avoid;
