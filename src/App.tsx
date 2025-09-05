@@ -116,6 +116,9 @@ function App() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingExportAction, setPendingExportAction] = useState<(() => void) | null>(null);
   const [exportType, setExportType] = useState<string>('');
+  
+  // Add key to force re-render when switching tabs to prevent stale state
+  const [componentKey, setComponentKey] = useState(0);
 
   const generateCleanHTML = () => {
     const contentId = activeTab === 'resume' ? 'resume-content' : 'cover-letter-content';
@@ -809,7 +812,7 @@ ${data.personalInfo.name}
                   style={{ backgroundColor: '#0044ff' }}
                 >
                   <Download className="w-4 h-4" />
-                  <span className="hidden sm:inline">Export Resume</span>
+                  <span className="hidden sm:inline">Export {activeTab === 'resume' ? 'Resume' : 'Cover Letter'}</span>
                   <span className="sm:hidden">Export</span>
                 </button>
                 
@@ -866,7 +869,10 @@ ${data.personalInfo.name}
         <div className="mb-6">
           <div className="flex space-x-1 bg-gray-800 p-1 rounded-2xl max-w-md mx-auto">
             <button
-              onClick={() => setActiveTab('resume')}
+              onClick={() => {
+                setActiveTab('resume');
+                setComponentKey(prev => prev + 1);
+              }}
               className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-xl font-medium transition-all duration-200 text-sm sm:text-base ${
                 activeTab === 'resume'
                   ? 'bg-blue-600 text-white shadow-lg'
@@ -877,7 +883,10 @@ ${data.personalInfo.name}
               <span>Resume</span>
             </button>
             <button
-              onClick={() => setActiveTab('cover-letter')}
+              onClick={() => {
+                setActiveTab('cover-letter');
+                setComponentKey(prev => prev + 1);
+              }}
               className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-xl font-medium transition-all duration-200 text-sm sm:text-base ${
                 activeTab === 'cover-letter'
                   ? 'bg-blue-600 text-white shadow-lg'
@@ -902,9 +911,19 @@ ${data.personalInfo.name}
           </div>
           <div className="p-4 sm:p-8 bg-black">
             {activeTab === 'resume' ? (
-              <ResumePreview data={resumeData} onUpdate={setResumeData} showGuidance={showGuidance} />
+              <ResumePreview 
+                key={`resume-${componentKey}`}
+                data={resumeData} 
+                onUpdate={setResumeData} 
+                showGuidance={showGuidance} 
+              />
             ) : (
-              <CoverLetterPreview data={coverLetterData} onUpdate={setCoverLetterData} showGuidance={showGuidance} />
+              <CoverLetterPreview 
+                key={`cover-letter-${componentKey}`}
+                data={coverLetterData} 
+                onUpdate={setCoverLetterData} 
+                showGuidance={showGuidance} 
+              />
             )}
           </div>
         </div>

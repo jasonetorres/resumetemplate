@@ -15,26 +15,28 @@ interface CoverLetterPreviewProps {
 
 const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate, showGuidance }) => {
   const [editingSection, setEditingSection] = useState<string | null>(null);
-  const [originalData, setOriginalData] = useState<CoverLetterData | null>(null);
+  
+  // Use useRef to store original data to prevent re-renders
+  const originalDataRef = React.useRef<CoverLetterData | null>(null);
 
   const handleEdit = (section: string) => {
-    if (!originalData) {
-      setOriginalData(data);
+    if (!originalDataRef.current) {
+      originalDataRef.current = JSON.parse(JSON.stringify(data)); // Deep copy
     }
     setEditingSection(section);
   };
 
   const handleSave = () => {
     setEditingSection(null);
-    setOriginalData(null);
+    originalDataRef.current = null;
   };
 
   const handleCancel = () => {
-    if (originalData) {
-      onUpdate(originalData);
+    if (originalDataRef.current) {
+      onUpdate(originalDataRef.current);
     }
     setEditingSection(null);
-    setOriginalData(null);
+    originalDataRef.current = null;
   };
 
   const handleUpdatePersonalInfo = (personalInfo: PersonalInfo) => {
