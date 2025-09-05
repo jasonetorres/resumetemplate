@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import React from 'react';
 import { ChevronDown } from 'lucide-react';
 import { CoverLetterData } from '../../types/resume';
 
