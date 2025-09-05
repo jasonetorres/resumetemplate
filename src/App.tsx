@@ -576,7 +576,7 @@ ${data.professionalSummary.content}
       <ul>
         ${project.description.map(desc => `<li>${desc}</li>`).join('')}
       </ul>
-      ${project.url ? `<p><strong>URL:</strong> <a href="${project.url.startsWith('http') ? project.url : 'https://' + project.url}" target="_blank">${project.url}</a></p>` : ''}
+      ${project.url ? `<p><strong>URL:</strong> <a href="${project.url.startsWith('http') ? project.url : 'https://' + project.url}" target="_blank" style="color: #000000; text-decoration: underline;">${project.url}</a></p>` : ''}
     `).join('')}
     ` : ''}
 

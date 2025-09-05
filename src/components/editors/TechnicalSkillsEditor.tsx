@@ -38,6 +38,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           type="text"
           value={localData.languages}
           onChange={(e) => handleChange('languages', e.target.value)}
+          onBlur={handleBlur}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
           placeholder="Python, JavaScript, TypeScript, Java, SQL, Go"
@@ -50,6 +51,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           type="text"
           value={localData.frameworks}
           onChange={(e) => handleChange('frameworks', e.target.value)}
+          onBlur={handleBlur}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
           placeholder="Django, Flask, React, Node.js, Spring Boot"
@@ -62,6 +64,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           type="text"
           value={localData.tools}
           onChange={(e) => handleChange('tools', e.target.value)}
+          onBlur={handleBlur}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
           placeholder="AWS (EC2, S3, Lambda, RDS), Docker, Kubernetes, Jenkins, Git"
@@ -74,6 +77,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           type="text"
           value={localData.methodologies}
           onChange={(e) => handleChange('methodologies', e.target.value)}
+          onBlur={handleBlur}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
           placeholder="Agile, Scrum, Kanban, Test-Driven Development (TDD), CI/CD"
@@ -86,6 +90,7 @@ const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onU
           type="text"
           value={localData.certifications}
           onChange={(e) => handleChange('certifications', e.target.value)}
+          onBlur={handleBlur}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
           placeholder="AWS Certified Solutions Architect - Professional"

@@ -311,9 +311,9 @@ const GuidancePanel: React.FC = () => {
                   <li>Any cert not relevant to target role</li>
                 </ul>
               </div>
-              <div className="bg-yellow-900/30 p-3 rounded border-l-4 border-yellow-400">
-                <p className="font-semibold text-yellow-300">💰 Niche Down for 6-Figures:</p>
-                <p className="text-yellow-200">Specialized certs in AI, cybersecurity, or cloud architecture can command $150K+ salaries</p>
+              <div className="bg-gray-200 p-3 rounded border-l-4 border-gray-800">
+                <p className="font-semibold text-gray-900">💰 Niche Down for 6-Figures:</p>
+                <p className="text-gray-800">Specialized certs in AI, cybersecurity, or cloud architecture can command $150K+ salaries</p>
               </div>
             </div>
           ) : (

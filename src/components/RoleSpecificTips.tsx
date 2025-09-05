@@ -218,8 +218,8 @@ const RoleSpecificTips: React.FC = () => {
           </div>
 
           <div className="bg-yellow-900/30 p-4 rounded-2xl border border-yellow-600">
-            <h5 className="font-bold text-yellow-300 mb-2 font-inter">💡 Recruiter's Note</h5>
-            <p className="text-sm text-yellow-200 font-inter">
+            <h5 className="font-bold text-gray-900 mb-2 font-inter">💡 Recruiter's Note</h5>
+            <p className="text-sm text-gray-800 font-inter">
               Resumes don't get you the job — but they do get you the interview. Use this template as your foundation, 
               then customize it so it tells your story clearly and quickly.
             </p>
