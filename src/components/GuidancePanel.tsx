@@ -96,9 +96,10 @@ const GuidancePanel: React.FC = () => {
           <p className="font-semibold text-blue-300">Critical for ATS and recruiters - This makes or breaks you!</p>
           {expandedCard === 'skills' ? (
             <div className="space-y-3 mt-4">
-              <div className="bg-blue-900/30 p-3 rounded">
+              <div className="bg-gray-200 p-3 rounded">
                 <p className="font-semibold text-blue-300 mb-2">🔥 In-Demand Skills for 2025:</p>
-                <ul className="list-disc list-inside space-y-1 text-blue-200">
+                <p className="font-semibold text-gray-900 mb-2">🔥 In-Demand Skills for 2025:</p>
+                <ul className="list-disc list-inside space-y-1 text-gray-800">
                   <li><strong>AI/ML:</strong> Python, TensorFlow, PyTorch, LangChain</li>
                   <li><strong>Cloud:</strong> AWS, Azure, GCP (advanced certifications)</li>
                   <li><strong>DevOps:</strong> Kubernetes, Docker, Terraform, Jenkins</li>
@@ -214,7 +215,6 @@ const GuidancePanel: React.FC = () => {
               <div className="bg-blue-900/30 p-3 rounded">
                 <p className="font-semibold text-blue-300 mb-2">💡 What Recruiters Want to See:</p>
                 <ul className="list-disc list-inside space-y-1 text-blue-200">
-                  <li>Live URLs (GitHub, deployed apps)</li>
                   <li>User metrics ("500+ active users")</li>
                   <li>Modern tech stack</li>
                   <li>Problem-solving approach</li>
@@ -302,7 +302,7 @@ const GuidancePanel: React.FC = () => {
                   <div><strong>Specialized:</strong> SIEM, Zero Trust, Kubernetes (CKA)</div>
                 </div>
               </div>
-              <div className="bg-gray-200 p-3 rounded border-l-4 border-gray-600">
+              <div className="bg-red-900/30 p-3 rounded border-l-4 border-red-400">
                 <p className="font-semibold text-red-300 mb-2">🚫 Remove These (They Make You Look Junior):</p>
                 <ul className="list-disc list-inside space-y-1 text-red-200">
                   <li>AWS Cloud Practitioner (if you have 5+ years)</li>
