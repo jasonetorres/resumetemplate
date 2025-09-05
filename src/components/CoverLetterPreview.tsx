@@ -44,30 +44,56 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate,
   const SectionWithGuidance: React.FC<{ 
     children: React.ReactNode; 
     guidance: React.ReactNode;
-  }> = ({ children, guidance }) => (
-    <div className={`${showGuidance ? 'space-y-6 lg:grid lg:grid-cols-1 xl:grid-cols-3 lg:gap-6 lg:space-y-0' : ''}`}>
-      <div className={showGuidance ? 'xl:col-span-2' : ''}>
+    sectionName: string;
+  }> = ({ children, guidance, sectionName }) => {
+    const [showModal, setShowModal] = useState(false);
+    
+    return (
+      <div className="space-y-4">
         {children}
+        {showGuidance && (
+          <div className="border-t border-gray-200 pt-3">
+            <button
+              onClick={() => setShowModal(true)}
+              className="inline-flex items-center space-x-2 px-3 py-2 text-white rounded-lg text-sm font-medium transition-all duration-200 hover:opacity-90"
+              style={{ backgroundColor: '#0044ff' }}
+            >
+              <span>💡 Tips for {sectionName}</span>
+            </button>
+            
+            {/* Modal */}
+            {showModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                  <div className="p-6 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xl font-bold text-gray-900">Tips for {sectionName}</h3>
+                      <button
+                        onClick={() => setShowModal(false)}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    {guidance}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      {showGuidance && (
-        <div className="xl:col-span-1">
-          {guidance}
-        </div>
-      )}
-    </div>
-  );
+    );
+  };
 
   return (
     <div id="cover-letter-content" className="max-w-4xl mx-auto bg-white rounded-lg p-4 sm:p-6 lg:p-8 shadow-lg">
-      {/* Cover Letter Guidance */}
-      {showGuidance && (
-        <div className="mb-8">
-          <CoverLetterGuidance />
-        </div>
-      )}
-
       {/* Personal Info Header */}
-      <SectionWithGuidance guidance={<div></div>}>
+      <SectionWithGuidance guidance={<div></div>} sectionName="Personal Info">
         <EditableSection
           title="Personal Information"
           isEditing={editingSection === 'personal'}
@@ -103,7 +129,7 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate,
       </SectionWithGuidance>
 
       {/* Cover Letter Content */}
-      <SectionWithGuidance guidance={<CoverLetterGuidance />}>
+      <SectionWithGuidance guidance={<CoverLetterGuidance />} sectionName="Cover Letter Writing">
         <EditableSection
           title="Cover Letter Content"
           isEditing={editingSection === 'content'}
