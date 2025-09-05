@@ -691,6 +691,7 @@ ${project.url ? `URL: ${project.url}` : ''}
 `).join('\n')}
 ` : ''}
 
+${data.education.length > 0 ? `
 ================================================================================
 EDUCATION
 ================================================================================
@@ -699,6 +700,7 @@ ${data.education.map(edu => `
 ${edu.institution} | ${edu.duration}
 ${edu.degree}
 `).join('\n')}
+` : ''}
   `;
 
   const generateCoverLetterTextContent = (data: CoverLetterData) => `
