@@ -25,7 +25,10 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
   // Auto-save changes as user types
   const handleUpdate = (newData: Project[]) => {
     setLocalData(newData);
-    onUpdate(newData);
+  };
+
+  const handleBlur = () => {
+    onUpdate(localData);
   };
 
   const addProject = () => {
@@ -98,6 +101,7 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
                 type="text"
                 value={project.name}
                 onChange={(e) => updateProject(projectIndex, 'name', e.target.value)}
+                onBlur={handleBlur}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                 style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
                 placeholder="Portfolio Tracker Pro"
@@ -109,6 +113,7 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
                 type="text"
                 value={project.duration}
                 onChange={(e) => updateProject(projectIndex, 'duration', e.target.value)}
+                onBlur={handleBlur}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                 style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
                 placeholder="01/2023 – Present"
@@ -122,6 +127,7 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
               type="text"
               value={project.technologies}
               onChange={(e) => updateProject(projectIndex, 'technologies', e.target.value)}
+              onBlur={handleBlur}
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
               style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
               placeholder="Python, Flask, React, Chart.js, Finnhub API"
@@ -134,6 +140,7 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
               type="text"
               value={project.url || ""}
               onChange={(e) => updateProject(projectIndex, 'url', e.target.value)}
+              onBlur={handleBlur}
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
               style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
               placeholder="github.com/yourusername/projectname"
@@ -156,6 +163,7 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
                 <textarea
                   value={desc}
                   onChange={(e) => updateDescription(projectIndex, descIndex, e.target.value)}
+                  onBlur={handleBlur}
                   rows={2}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                   style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}

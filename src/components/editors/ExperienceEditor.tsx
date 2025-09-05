@@ -25,7 +25,10 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
   // Auto-save changes as user types
   const handleUpdate = (newData: Experience[]) => {
     setLocalData(newData);
-    onUpdate(newData);
+  };
+
+  const handleBlur = () => {
+    onUpdate(localData);
   };
 
   const addExperience = () => {
@@ -96,6 +99,7 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
                 type="text"
                 value={exp.company}
                 onChange={(e) => updateExperience(expIndex, 'company', e.target.value)}
+                onBlur={handleBlur}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                 style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
                 placeholder="Company Name"
@@ -107,6 +111,7 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
                 type="text"
                 value={exp.location}
                 onChange={(e) => updateExperience(expIndex, 'location', e.target.value)}
+                onBlur={handleBlur}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                 style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
                 placeholder="New York, NY"
@@ -118,6 +123,7 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
                 type="text"
                 value={exp.position}
                 onChange={(e) => updateExperience(expIndex, 'position', e.target.value)}
+                onBlur={handleBlur}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                 style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
                 placeholder="Senior Software Engineer"
@@ -129,6 +135,7 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
                 type="text"
                 value={exp.duration}
                 onChange={(e) => updateExperience(expIndex, 'duration', e.target.value)}
+                onBlur={handleBlur}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                 style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
                 placeholder="06/2021 – Present"
@@ -142,6 +149,7 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
               type="text"
               value={exp.technologies}
               onChange={(e) => updateExperience(expIndex, 'technologies', e.target.value)}
+              onBlur={handleBlur}
               className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
               style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
               placeholder="Python, Django, React, TypeScript, AWS, Docker, Kubernetes, PostgreSQL"
@@ -164,6 +172,7 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
                 <textarea
                   value={achievement}
                   onChange={(e) => updateAchievement(expIndex, achIndex, e.target.value)}
+                  onBlur={handleBlur}
                   rows={2}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                   style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}

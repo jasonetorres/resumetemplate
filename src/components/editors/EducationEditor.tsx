@@ -25,7 +25,10 @@ const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate, onSav
   // Auto-save changes as user types
   const handleUpdate = (newData: Education[]) => {
     setLocalData(newData);
-    onUpdate(newData);
+  };
+
+  const handleBlur = () => {
+    onUpdate(localData);
   };
 
   const addEducation = () => {
@@ -69,6 +72,7 @@ const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate, onSav
                 type="text"
                 value={edu.institution}
                 onChange={(e) => updateEducation(index, 'institution', e.target.value)}
+                onBlur={handleBlur}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                 style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
                 placeholder="State University"
@@ -80,6 +84,7 @@ const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate, onSav
                 type="text"
                 value={edu.degree}
                 onChange={(e) => updateEducation(index, 'degree', e.target.value)}
+                onBlur={handleBlur}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                 style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
                 placeholder="Bachelor of Science in Computer Science, Magna Cum Laude"
@@ -91,6 +96,7 @@ const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate, onSav
                 type="text"
                 value={edu.duration}
                 onChange={(e) => updateEducation(index, 'duration', e.target.value)}
+                onBlur={handleBlur}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 bg-white text-gray-900 font-inter"
                 style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
                 placeholder="08/2013 – 05/2017"
