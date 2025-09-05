@@ -921,12 +921,12 @@ ${data.personalInfo.name}
         </div>
 
         <div className="bg-black rounded-3xl shadow-2xl overflow-hidden border border-white/10">
-          <div className="p-4 sm:p-6 text-white" style={{ background: 'linear-gradient(to right, #0044ff, #0066ff)' }}>
+          <div className="p-4 sm:p-6 text-white bg-gray-800">
             <h2 className="text-lg sm:text-xl font-semibold flex items-center space-x-2 font-inter">
               <Edit3 className="w-5 h-5" />
               <span>Click any section to edit your {activeTab === 'resume' ? 'resume' : 'cover letter'}</span>
             </h2>
-            <p className="text-blue-100 mt-1 font-inter text-sm sm:text-base">
+            <p className="text-gray-300 mt-1 font-inter text-sm sm:text-base">
               Your {activeTab === 'resume' ? 'resume' : 'cover letter'} will update in real-time as you make changes
             </p>
           </div>
