@@ -912,14 +912,12 @@ ${data.personalInfo.name}
           <div className="p-4 sm:p-8 bg-black">
             {activeTab === 'resume' ? (
               <ResumePreview 
-                key={`resume-${componentKey}`}
                 data={resumeData} 
                 onUpdate={setResumeData} 
                 showGuidance={showGuidance} 
               />
             ) : (
               <CoverLetterPreview 
-                key={`cover-letter-${componentKey}`}
                 data={coverLetterData} 
                 onUpdate={setCoverLetterData} 
                 showGuidance={showGuidance} 
