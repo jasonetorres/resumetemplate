@@ -96,10 +96,9 @@ const GuidancePanel: React.FC = () => {
           <p className="font-semibold text-blue-300">Critical for ATS and recruiters - This makes or breaks you!</p>
           {expandedCard === 'skills' ? (
             <div className="space-y-3 mt-4">
-              <div className="bg-gray-200 p-3 rounded">
+              <div className="bg-blue-900/30 p-3 rounded">
                 <p className="font-semibold text-blue-300 mb-2">🔥 In-Demand Skills for 2025:</p>
-                <p className="font-semibold text-gray-900 mb-2">🔥 In-Demand Skills for 2025:</p>
-                <ul className="list-disc list-inside space-y-1 text-gray-800">
+                <ul className="list-disc list-inside space-y-1 text-blue-200">
                   <li><strong>AI/ML:</strong> Python, TensorFlow, PyTorch, LangChain</li>
                   <li><strong>Cloud:</strong> AWS, Azure, GCP (advanced certifications)</li>
                   <li><strong>DevOps:</strong> Kubernetes, Docker, Terraform, Jenkins</li>
@@ -215,6 +214,7 @@ const GuidancePanel: React.FC = () => {
               <div className="bg-blue-900/30 p-3 rounded">
                 <p className="font-semibold text-blue-300 mb-2">💡 What Recruiters Want to See:</p>
                 <ul className="list-disc list-inside space-y-1 text-blue-200">
+                  <li>Live URLs (GitHub, deployed apps)</li>
                   <li>User metrics ("500+ active users")</li>
                   <li>Modern tech stack</li>
                   <li>Problem-solving approach</li>
@@ -234,19 +234,16 @@ const GuidancePanel: React.FC = () => {
       </div>
 
       {/* Education Guide */}
-      <div 
-        className="bg-gray-700 rounded-lg shadow-md p-6 border-l-4 border-pink-500 cursor-pointer hover:shadow-lg transition-shadow"
-        onClick={() => toggleCard('education')}
-      >
-        <h4 className="font-bold text-white mb-3 flex items-center justify-between">
+      <div className="bg-gray-100 rounded-lg shadow-md p-6 border-l-4 border-gray-800 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => toggleCard('education')}>
+        <h4 className="font-bold text-gray-900 mb-3 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <GraduationCap className="w-4 h-4 text-pink-400" />
+            <GraduationCap className="w-4 h-4 text-gray-800" />
             <span>Education</span>
           </div>
-          <span className="text-pink-400 text-sm">Click to expand</span>
+          <span className="text-gray-700 text-sm">Click to expand</span>
         </h4>
-        <div className="text-sm text-gray-300 space-y-2">
-          <p className="font-semibold text-pink-300">Strategic placement = prime real estate optimization</p>
+        <div className="text-sm text-gray-700 space-y-2">
+          <p className="font-semibold text-gray-900">Strategic placement = prime real estate optimization</p>
           {expandedCard === 'education' ? (
             <div className="space-y-3 mt-4">
               <div className="bg-pink-900/30 p-3 rounded">
