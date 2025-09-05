@@ -300,14 +300,14 @@ function App() {
       </div>
     </div>
 
-    <div class="mb-6">
+    <div class="mb-4">
       <h3 class="text-lg font-bold text-gray-900 mb-4">PROFESSIONAL SUMMARY</h3>
       <div class="text-gray-700 leading-relaxed whitespace-pre-line">
 ${data.professionalSummary.content}
       </div>
     </div>
 
-    <div class="mb-6">
+    <div class="mb-4">
       <h3 class="text-lg font-bold text-gray-900 mb-4">TECHNICAL SKILLS</h3>
       <div class="skills-grid text-sm">
         <div>Languages:</div>
@@ -323,9 +323,9 @@ ${data.professionalSummary.content}
       </div>
     </div>
 
-    <div class="mb-6 page-break-inside-avoid">
+    <div class="mb-4 page-break-inside-avoid">
       <h3 class="text-lg font-bold text-gray-900 mb-4">PROFESSIONAL EXPERIENCE</h3>
-      <div class="space-y-5">
+      <div class="space-y-4">
         ${data.experience.map(exp => `
           <div class="page-break-inside-avoid">
             <div class="mb-2">
@@ -344,7 +344,7 @@ ${data.professionalSummary.content}
     </div>
 
     ${data.projects.length > 0 ? `
-    <div class="mb-6 page-break-inside-avoid">
+    <div class="mb-4 page-break-inside-avoid">
       <h3 class="text-lg font-bold text-gray-900 mb-4">PROJECTS</h3>
       <div class="space-y-4">
         ${data.projects.map(project => `
@@ -369,7 +369,8 @@ ${data.professionalSummary.content}
     </div>
     ` : ''}
 
-    <div class="mb-4">
+    ${data.education.length > 0 ? `
+    <div class="mb-2">
       <h3 class="text-lg font-bold text-gray-900 mb-4">EDUCATION</h3>
       <div class="space-y-2">
         ${data.education.map(edu => `
@@ -380,6 +381,7 @@ ${data.professionalSummary.content}
         `).join('')}
       </div>
     </div>
+    ` : ''}
   `;
 
   const generateCoverLetterHTML = (data: CoverLetterData) => `
