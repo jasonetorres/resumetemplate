@@ -15,25 +15,36 @@ interface CoverLetterPreviewProps {
 
 const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate, showGuidance }) => {
   const [editingSection, setEditingSection] = useState<string | null>(null);
+  const [tempData, setTempData] = useState<CoverLetterData>(data);
+
+  // Update temp data when props change and not editing
+  React.useEffect(() => {
+    if (!editingSection) {
+      setTempData(data);
+    }
+  }, [data, editingSection]);
 
   const handleEdit = (section: string) => {
+    setTempData(data); // Store current data as temp
     setEditingSection(section);
   };
 
   const handleSave = () => {
+    onUpdate(tempData); // Save temp data to parent
     setEditingSection(null);
   };
 
   const handleCancel = () => {
+    setTempData(data); // Reset temp data to original
     setEditingSection(null);
   };
 
   const handleUpdatePersonalInfo = (personalInfo: PersonalInfo) => {
-    onUpdate({ ...data, personalInfo });
+    setTempData({ ...tempData, personalInfo });
   };
 
   const handleUpdateCoverLetter = (updatedData: Omit<CoverLetterData, 'personalInfo'>) => {
-    onUpdate({ ...data, ...updatedData });
+    setTempData({ ...tempData, ...updatedData });
   };
 
   const SectionWithGuidance: React.FC<{ 
@@ -71,14 +82,14 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate,
           onCancel={handleCancel}
           editor={
             <PersonalInfoEditor
-              data={data.personalInfo}
+              data={tempData.personalInfo}
               onUpdate={handleUpdatePersonalInfo}
             />
           }
         >
           <div className="text-right mb-6 sm:mb-8">
             <div className="flex items-center justify-end mb-2">
-              <h1 className="text-lg sm:text-xl font-semibold text-gray-900">{data.personalInfo.name}</h1>
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-900">{tempData.personalInfo.name}</h1>
               <button
                 onClick={() => handleEdit('personal')}
                 className="ml-2 sm:ml-3 flex items-center space-x-1 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-all duration-200"
@@ -89,9 +100,9 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate,
               </button>
             </div>
             <div className="text-gray-600 text-xs sm:text-sm space-y-1">
-              <div>{data.personalInfo.email}</div>
-              <div>{data.personalInfo.phone}</div>
-              <div className="break-all">{data.personalInfo.linkedin}</div>
+              <div>{tempData.personalInfo.email}</div>
+              <div>{tempData.personalInfo.phone}</div>
+              <div className="break-all">{tempData.personalInfo.linkedin}</div>
             </div>
           </div>
         </EditableSection>
@@ -107,7 +118,7 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate,
           onCancel={handleCancel}
           editor={
             <CoverLetterEditor
-              data={data}
+              data={tempData}
               onUpdate={handleUpdateCoverLetter}
             />
           }
@@ -115,7 +126,7 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate,
           <div className="space-y-4 sm:space-y-6">
             {/* Date and Recipient Info */}
             <div className="flex items-center justify-between mb-4">
-              <div className="text-gray-900 text-sm sm:text-base">{data.recipientInfo.date}</div>
+              <div className="text-gray-900 text-sm sm:text-base">{tempData.recipientInfo.date}</div>
               <button
                 onClick={() => handleEdit('content')}
                 className="flex items-center space-x-1 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-all duration-200"
@@ -127,25 +138,25 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({ data, onUpdate,
             </div>
             
             <div className="mb-4 sm:mb-6">
-              <div className="text-gray-900 font-semibold text-sm sm:text-base">{data.recipientInfo.hiringManager}</div>
-              <div className="text-gray-700 text-sm sm:text-base">{data.recipientInfo.company}</div>
+              <div className="text-gray-900 font-semibold text-sm sm:text-base">{tempData.recipientInfo.hiringManager}</div>
+              <div className="text-gray-700 text-sm sm:text-base">{tempData.recipientInfo.company}</div>
             </div>
             
             <div className="mb-4 sm:mb-6">
-              <div className="text-gray-900 font-semibold text-sm sm:text-base">Re: {data.recipientInfo.position}</div>
+              <div className="text-gray-900 font-semibold text-sm sm:text-base">Re: {tempData.recipientInfo.position}</div>
             </div>
 
             {/* Letter Content */}
             <div className="space-y-4 text-gray-700 leading-relaxed text-sm sm:text-base">
-              <p>Dear {data.recipientInfo.hiringManager},</p>
+              <p>Dear {tempData.recipientInfo.hiringManager},</p>
               
-              <div className="whitespace-pre-line">{data.content.opening}</div>
+              <div className="whitespace-pre-line">{tempData.content.opening}</div>
               
-              <div className="whitespace-pre-line">{data.content.body}</div>
+              <div className="whitespace-pre-line">{tempData.content.body}</div>
               
-              <div className="whitespace-pre-line">{data.content.closing}</div>
+              <div className="whitespace-pre-line">{tempData.content.closing}</div>
               
-              <p>Sincerely,<br />{data.personalInfo.name}</p>
+              <p>Sincerely,<br />{tempData.personalInfo.name}</p>
             </div>
           </div>
         </EditableSection>
