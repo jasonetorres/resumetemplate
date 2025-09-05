@@ -319,100 +319,142 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
       </SectionWithGuidance>
 
       {/* Projects */}
-      <SectionWithGuidance guidance={<ProjectsGuidance />} sectionName="Projects">
-        <EditableSection
-          title="Projects"
-          isEditing={editingSection === 'projects'}
-          onEdit={() => handleEdit('projects')}
-          onSave={handleSave}
-          onCancel={handleCancel}
-          editor={
-            <ProjectsEditor
-              data={data.projects}
-              onUpdate={handleUpdateProjects}
-            />
-          }
-        >
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 pb-2 border-b-2 border-black flex-1">
-                PROJECTS
-              </h3>
-              <button
-                onClick={() => handleEdit('projects')}
-                className="flex items-center space-x-1 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-all duration-200 ml-2"
-                style={{ backgroundColor: '#0044ff' }}
-              >
-                <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Edit</span>
-              </button>
-            </div>
-            <div className="space-y-4">
-              {data.projects.map((project, index) => (
-                <div key={index}>
-                  <div className="mb-2">
-                    <h4 className="font-bold text-gray-900 text-sm sm:text-base">{project.name} | {project.duration}</h4>
-                    <div className="text-xs sm:text-sm italic" style={{ color: '#0044ff' }}>
-                      Technologies: {project.technologies}
+      {/* Projects - Only show if there are projects or if editing */}
+      {(data.projects.length > 0 || editingSection === 'projects') && (
+        <SectionWithGuidance guidance={<ProjectsGuidance />} sectionName="Projects">
+          <EditableSection
+            title="Projects"
+            isEditing={editingSection === 'projects'}
+            onEdit={() => handleEdit('projects')}
+            onSave={handleSave}
+            onCancel={handleCancel}
+            editor={
+              <ProjectsEditor
+                data={data.projects}
+                onUpdate={handleUpdateProjects}
+              />
+            }
+          >
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 pb-2 border-b-2 border-black flex-1">
+                  PROJECTS
+                </h3>
+                <button
+                  onClick={() => handleEdit('projects')}
+                  className="flex items-center space-x-1 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-all duration-200 ml-2"
+                  style={{ backgroundColor: '#0044ff' }}
+                >
+                  <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">Edit</span>
+                </button>
+              </div>
+              {data.projects.length > 0 ? (
+                <div className="space-y-4">
+                  {data.projects.map((project, index) => (
+                    <div key={index}>
+                      <div className="mb-2">
+                        <h4 className="font-bold text-gray-900 text-sm sm:text-base">{project.name} | {project.duration}</h4>
+                        <div className="text-xs sm:text-sm italic" style={{ color: '#0044ff' }}>
+                          Technologies: {project.technologies}
+                        </div>
+                      </div>
+                      <ul className="list-disc list-inside space-y-1 text-gray-700 ml-2 sm:ml-4 text-sm sm:text-base">
+                        {project.description.map((desc, descIndex) => (
+                          <li key={descIndex}>{desc}</li>
+                        ))}
+                      </ul>
+                      {project.url && (
+                        <div className="text-xs sm:text-sm mt-1 break-all" style={{ color: '#0044ff' }}>
+                          URL: <span className="break-all">{project.url}</span>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  <ul className="list-disc list-inside space-y-1 text-gray-700 ml-2 sm:ml-4 text-sm sm:text-base">
-                    {project.description.map((desc, descIndex) => (
-                      <li key={descIndex}>{desc}</li>
-                    ))}
-                  </ul>
-                  {project.url && (
-                    <div className="text-xs sm:text-sm mt-1 break-all" style={{ color: '#0044ff' }}>
-                      URL: <span className="break-all">{project.url}</span>
-                    </div>
-                  )}
+                  ))}
                 </div>
-              ))}
+              ) : (
+                <div className="text-gray-500 italic text-sm">
+                  No projects added yet. Click "Edit" to add your first project.
+                </div>
+              )}
             </div>
-          </div>
-        </EditableSection>
-      </SectionWithGuidance>
+          </EditableSection>
+        </SectionWithGuidance>
+      )}
+
+      {/* Add Projects Button - Only show if no projects exist and not editing */}
+      {data.projects.length === 0 && editingSection !== 'projects' && (
+        <div className="mb-6">
+          <button
+            onClick={() => handleEdit('projects')}
+            className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:text-blue-600 hover:border-blue-300 transition-colors flex items-center justify-center space-x-2"
+          >
+            <span>+ Add Projects Section</span>
+          </button>
+        </div>
+      )}
 
       {/* Education */}
-      <SectionWithGuidance guidance={<EducationGuidance />} sectionName="Education">
-        <EditableSection
-          title="Education"
-          isEditing={editingSection === 'education'}
-          onEdit={() => handleEdit('education')}
-          onSave={handleSave}
-          onCancel={handleCancel}
-          editor={
-            <EducationEditor
-              data={data.education}
-              onUpdate={handleUpdateEducation}
-            />
-          }
-        >
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 pb-2 border-b-2 border-black flex-1">
-                EDUCATION
-              </h3>
-              <button
-                onClick={() => handleEdit('education')}
-                className="flex items-center space-x-1 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-all duration-200 ml-2"
-                style={{ backgroundColor: '#0044ff' }}
-              >
-                <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Edit</span>
-              </button>
-            </div>
-            <div className="space-y-2">
-              {data.education.map((edu, index) => (
-                <div key={index}>
-                  <h4 className="font-bold text-gray-900 text-sm sm:text-base">{edu.institution} | {edu.duration}</h4>
-                  <div className="text-gray-700 text-sm sm:text-base">{edu.degree}</div>
+      {/* Education - Only show if there is education or if editing */}
+      {(data.education.length > 0 || editingSection === 'education') && (
+        <SectionWithGuidance guidance={<EducationGuidance />} sectionName="Education">
+          <EditableSection
+            title="Education"
+            isEditing={editingSection === 'education'}
+            onEdit={() => handleEdit('education')}
+            onSave={handleSave}
+            onCancel={handleCancel}
+            editor={
+              <EducationEditor
+                data={data.education}
+                onUpdate={handleUpdateEducation}
+              />
+            }
+          >
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 pb-2 border-b-2 border-black flex-1">
+                  EDUCATION
+                </h3>
+                <button
+                  onClick={() => handleEdit('education')}
+                  className="flex items-center space-x-1 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-all duration-200 ml-2"
+                  style={{ backgroundColor: '#0044ff' }}
+                >
+                  <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">Edit</span>
+                </button>
+              </div>
+              {data.education.length > 0 ? (
+                <div className="space-y-2">
+                  {data.education.map((edu, index) => (
+                    <div key={index}>
+                      <h4 className="font-bold text-gray-900 text-sm sm:text-base">{edu.institution} | {edu.duration}</h4>
+                      <div className="text-gray-700 text-sm sm:text-base">{edu.degree}</div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              ) : (
+                <div className="text-gray-500 italic text-sm">
+                  No education added yet. Click "Edit" to add your education.
+                </div>
+              )}
             </div>
-          </div>
-        </EditableSection>
-      </SectionWithGuidance>
+          </EditableSection>
+        </SectionWithGuidance>
+      )}
+
+      {/* Add Education Button - Only show if no education exists and not editing */}
+      {data.education.length === 0 && editingSection !== 'education' && (
+        <div className="mb-4">
+          <button
+            onClick={() => handleEdit('education')}
+            className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:text-blue-600 hover:border-blue-300 transition-colors flex items-center justify-center space-x-2"
+          >
+            <span>+ Add Education Section</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };
