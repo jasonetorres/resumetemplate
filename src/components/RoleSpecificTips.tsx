@@ -150,14 +150,14 @@ const RoleSpecificTips: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-gray-800 to-gray-700 rounded-2xl shadow-md border border-gray-600">
+    <div className="bg-gray-100 rounded-2xl shadow-md border border-gray-300">
       <div 
         className="p-4 cursor-pointer flex items-center justify-between"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center space-x-2">
           <Target className="w-5 h-5" style={{ color: '#0044ff' }} />
-          <h4 className="font-bold text-white font-inter">Role-Specific Resume Tips</h4>
+          <h4 className="font-bold text-gray-900 font-inter">Role-Specific Resume Tips</h4>
         </div>
         {isExpanded ? (
           <ChevronUp className="w-4 h-4" style={{ color: '#0044ff' }} />
@@ -218,8 +218,8 @@ const RoleSpecificTips: React.FC = () => {
           </div>
 
           <div className="bg-yellow-900/30 p-4 rounded-2xl border border-yellow-600">
-            <h5 className="font-bold text-gray-900 mb-2 font-inter">💡 Recruiter's Note</h5>
-            <p className="text-sm text-gray-800 font-inter">
+            <h5 className="font-bold text-yellow-300 mb-2 font-inter">💡 Recruiter's Note</h5>
+            <p className="text-sm text-yellow-200 font-inter">
               Resumes don't get you the job — but they do get you the interview. Use this template as your foundation, 
               then customize it so it tells your story clearly and quickly.
             </p>
