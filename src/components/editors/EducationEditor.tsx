@@ -41,7 +41,9 @@ const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate, onSav
   };
 
   const removeEducation = (index: number) => {
-    handleUpdate(localData.filter((_, i) => i !== index));
+    const newData = localData.filter((_, i) => i !== index);
+    setLocalData(newData);
+    onUpdate(newData);
   };
 
   const updateEducation = (index: number, field: keyof Education, value: string) => {

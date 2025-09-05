@@ -43,7 +43,9 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave,
   };
 
   const removeProject = (index: number) => {
-    handleUpdate(localData.filter((_, i) => i !== index));
+    const newData = localData.filter((_, i) => i !== index);
+    setLocalData(newData);
+    onUpdate(newData);
   };
 
   const updateProject = (index: number, field: keyof Project, value: any) => {

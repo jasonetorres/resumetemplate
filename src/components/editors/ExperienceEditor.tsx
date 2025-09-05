@@ -44,7 +44,9 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onS
   };
 
   const removeExperience = (index: number) => {
-    handleUpdate(localData.filter((_, i) => i !== index));
+    const newData = localData.filter((_, i) => i !== index);
+    setLocalData(newData);
+    onUpdate(newData);
   };
 
   const updateExperience = (index: number, field: keyof Experience, value: any) => {
