@@ -1,45 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Experience } from '../../types/resume';
 
 interface ExperienceEditorProps {
   data: Experience[];
   onUpdate: (data: Experience[]) => void;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 
-const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate }) => {
+const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate, onSave, onCancel }) => {
   const [localData, setLocalData] = useState<Experience[]>(data);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isEditingRef = useRef<boolean>(false);
 
-  useEffect(() => {
-    if (!isEditingRef.current) {
-      setLocalData(data);
-    }
-  }, [data]);
-
-  const updateWithDebounce = (newData: Experience[]) => {
-    setLocalData(newData);
-    isEditingRef.current = true;
-    
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    
-    timeoutRef.current = setTimeout(() => {
-      onUpdate(newData);
-      isEditingRef.current = false;
-    }, 500);
+  const handleSave = () => {
+    onUpdate(localData);
+    onSave?.();
   };
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
+  const handleCancel = () => {
+    setLocalData(data);
+    onCancel?.();
+  };
   const addExperience = () => {
     const newExp: Experience = {
       company: "",
@@ -49,32 +30,32 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate }) =
       technologies: "",
       achievements: [""]
     };
-    updateWithDebounce([...localData, newExp]);
+    setLocalData([...localData, newExp]);
   };
 
   const removeExperience = (index: number) => {
-    updateWithDebounce(localData.filter((_, i) => i !== index));
+    setLocalData(localData.filter((_, i) => i !== index));
   };
 
   const updateExperience = (index: number, field: keyof Experience, value: any) => {
     const newData = localData.map((exp, i) => 
       i === index ? { ...exp, [field]: value } : exp
     );
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   const addAchievement = (expIndex: number) => {
     const newData = localData.map((exp, i) => 
       i === expIndex ? { ...exp, achievements: [...exp.achievements, ""] } : exp
     );
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   const removeAchievement = (expIndex: number, achIndex: number) => {
     const newData = localData.map((exp, i) => 
       i === expIndex ? { ...exp, achievements: exp.achievements.filter((_, j) => j !== achIndex) } : exp
     );
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   const updateAchievement = (expIndex: number, achIndex: number, value: string) => {
@@ -84,7 +65,7 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate }) =
         achievements: exp.achievements.map((ach, j) => j === achIndex ? value : ach)
       } : exp
     );
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   return (

@@ -1,52 +1,40 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { CoverLetterData } from '../../types/resume';
 
 interface CoverLetterEditorProps {
   data: CoverLetterData;
   onUpdate: (data: Omit<CoverLetterData, 'personalInfo'>) => void;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 
-const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate }) => {
+const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate, onSave, onCancel }) => {
   const [showTemplates, setShowTemplates] = useState(false);
   const [localData, setLocalData] = useState({
     recipientInfo: data.recipientInfo,
     content: data.content
   });
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isEditingRef = useRef<boolean>(false);
 
-  useEffect(() => {
-    if (!isEditingRef.current) {
-      setLocalData({
-        recipientInfo: data.recipientInfo,
-        content: data.content
-      });
-    }
-  }, [data.recipientInfo, data.content]);
-
-  const updateWithDebounce = (newData: Omit<CoverLetterData, 'personalInfo'>) => {
-    setLocalData(newData);
-    isEditingRef.current = true;
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      onUpdate(newData);
-      isEditingRef.current = false;
-    }, 500);
+  const handleSave = () => {
+    onUpdate(localData);
+    onSave?.();
   };
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
+  const handleCancel = () => {
+    setLocalData({
+      recipientInfo: data.recipientInfo,
+      content: data.content
+    });
+    onCancel?.();
+  };
 
   const handleRecipientChange = (field: keyof typeof data.recipientInfo, value: string) => {
     const newData = {
       recipientInfo: { ...localData.recipientInfo, [field]: value },
       content: localData.content
     };
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   const handleContentChange = (field: keyof typeof data.content, value: string) => {
@@ -54,7 +42,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
       recipientInfo: localData.recipientInfo,
       content: { ...localData.content, [field]: value }
     };
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   const coverLetterTemplates = {
@@ -106,7 +94,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
           closing: template.closing
         }
       };
-      updateWithDebounce(newData);
+setLocalData(newData);
       setShowTemplates(false);
     }
   };

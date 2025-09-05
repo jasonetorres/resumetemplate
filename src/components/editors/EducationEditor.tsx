@@ -1,38 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Education } from '../../types/resume';
 
 interface EducationEditorProps {
   data: Education[];
   onUpdate: (data: Education[]) => void;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 
-const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate }) => {
+const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate, onSave, onCancel }) => {
   const [localData, setLocalData] = useState<Education[]>(data);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isEditingRef = useRef<boolean>(false);
 
-  useEffect(() => {
-    if (!isEditingRef.current) {
-      setLocalData(data);
-    }
-  }, [data]);
-
-  const updateWithDebounce = (newData: Education[]) => {
-    setLocalData(newData);
-    isEditingRef.current = true;
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      onUpdate(newData);
-      isEditingRef.current = false;
-    }, 500);
+  const handleSave = () => {
+    onUpdate(localData);
+    onSave?.();
   };
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
+  const handleCancel = () => {
+    setLocalData(data);
+    onCancel?.();
+  };
 
   const addEducation = () => {
     const newEdu: Education = {
@@ -40,18 +28,18 @@ const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate }) => 
       degree: "",
       duration: ""
     };
-    updateWithDebounce([...localData, newEdu]);
+setLocalData([...localData, newEdu]);
   };
 
   const removeEducation = (index: number) => {
-    updateWithDebounce(localData.filter((_, i) => i !== index));
+    setLocalData(localData.filter((_, i) => i !== index));
   };
 
   const updateEducation = (index: number, field: keyof Education, value: string) => {
     const newData = localData.map((edu, i) => 
       i === index ? { ...edu, [field]: value } : edu
     );
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   return (

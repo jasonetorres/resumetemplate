@@ -1,46 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { PersonalInfo } from '../../types/resume';
 
 interface PersonalInfoEditorProps {
   data: PersonalInfo;
   onUpdate: (data: PersonalInfo) => void;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 
-const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate }) => {
+const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate, onSave, onCancel }) => {
   const [localData, setLocalData] = useState<PersonalInfo>(data);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isEditingRef = useRef<boolean>(false);
-
-  // Only update local state when data prop changes from parent AND we're not actively editing
-  useEffect(() => {
-    if (!isEditingRef.current) {
-      setLocalData(data);
-    }
-  }, [data]);
 
   const handleChange = (field: keyof PersonalInfo, value: string) => {
     const newData = { ...localData, [field]: value };
     setLocalData(newData);
-    isEditingRef.current = true;
-    
-    // Debounce the parent update
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      onUpdate(newData);
-      isEditingRef.current = false;
-    }, 500);
   };
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
+  const handleSave = () => {
+    onUpdate(localData);
+    onSave?.();
+  };
+
+  const handleCancel = () => {
+    setLocalData(data);
+    onCancel?.();
+  };
 
   return (
     <div className="space-y-4">

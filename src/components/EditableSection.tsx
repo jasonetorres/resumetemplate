@@ -61,7 +61,7 @@ const EditableSection: React.FC<EditableSectionProps> = ({
             </button>
           </div>
         </div>
-        {editor}
+        {React.isValidElement(editor) ? React.cloneElement(editor, { onSave: handleSave, onCancel: handleCancel }) : editor}
       </div>
     );
   }

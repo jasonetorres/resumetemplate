@@ -1,38 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Project } from '../../types/resume';
 
 interface ProjectsEditorProps {
   data: Project[];
   onUpdate: (data: Project[]) => void;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 
-const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate }) => {
+const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate, onSave, onCancel }) => {
   const [localData, setLocalData] = useState<Project[]>(data);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isEditingRef = useRef<boolean>(false);
 
-  useEffect(() => {
-    if (!isEditingRef.current) {
-      setLocalData(data);
-    }
-  }, [data]);
-
-  const updateWithDebounce = (newData: Project[]) => {
-    setLocalData(newData);
-    isEditingRef.current = true;
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      onUpdate(newData);
-      isEditingRef.current = false;
-    }, 500);
+  const handleSave = () => {
+    onUpdate(localData);
+    onSave?.();
   };
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
+  const handleCancel = () => {
+    setLocalData(data);
+    onCancel?.();
+  };
   const addProject = () => {
     const newProject: Project = {
       name: "",
@@ -41,25 +29,25 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate }) => {
       description: [""],
       url: ""
     };
-    updateWithDebounce([...localData, newProject]);
+setLocalData([...localData, newProject]);
   };
 
   const removeProject = (index: number) => {
-    updateWithDebounce(localData.filter((_, i) => i !== index));
+    setLocalData(localData.filter((_, i) => i !== index));
   };
 
   const updateProject = (index: number, field: keyof Project, value: any) => {
     const newData = localData.map((project, i) => 
       i === index ? { ...project, [field]: value } : project
     );
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   const addDescription = (projectIndex: number) => {
     const newData = localData.map((project, i) => 
       i === projectIndex ? { ...project, description: [...project.description, ""] } : project
     );
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   const removeDescription = (projectIndex: number, descIndex: number) => {
@@ -69,7 +57,7 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate }) => {
         description: project.description.filter((_, j) => j !== descIndex) 
       } : project
     );
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   const updateDescription = (projectIndex: number, descIndex: number, value: string) => {
@@ -79,7 +67,7 @@ const ProjectsEditor: React.FC<ProjectsEditorProps> = ({ data, onUpdate }) => {
         description: project.description.map((desc, j) => j === descIndex ? value : desc)
       } : project
     );
-    updateWithDebounce(newData);
+    setLocalData(newData);
   };
 
   return (

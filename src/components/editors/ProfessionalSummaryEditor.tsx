@@ -1,44 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { ProfessionalSummary } from '../../types/resume';
 
 interface ProfessionalSummaryEditorProps {
   data: ProfessionalSummary;
   onUpdate: (data: ProfessionalSummary) => void;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 
-const ProfessionalSummaryEditor: React.FC<ProfessionalSummaryEditorProps> = ({ data, onUpdate }) => {
+const ProfessionalSummaryEditor: React.FC<ProfessionalSummaryEditorProps> = ({ data, onUpdate, onSave, onCancel }) => {
   const [localData, setLocalData] = useState<ProfessionalSummary>(data);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isEditingRef = useRef<boolean>(false);
-
-  useEffect(() => {
-    if (!isEditingRef.current) {
-      setLocalData(data);
-    }
-  }, [data]);
 
   const handleChange = (value: string) => {
     const newData = { content: value };
     setLocalData(newData);
-    isEditingRef.current = true;
-    
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      onUpdate(newData);
-      isEditingRef.current = false;
-    }, 500);
   };
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
+  const handleSave = () => {
+    onUpdate(localData);
+    onSave?.();
+  };
+
+  const handleCancel = () => {
+    setLocalData(data);
+    onCancel?.();
+  };
 
   return (
     <div className="space-y-4">
