@@ -10,15 +10,22 @@ interface EducationEditorProps {
 const EducationEditor: React.FC<EducationEditorProps> = ({ data, onUpdate }) => {
   const [localData, setLocalData] = useState<Education[]>(data);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isEditingRef = useRef<boolean>(false);
 
   useEffect(() => {
-    setLocalData(data);
+    if (!isEditingRef.current) {
+      setLocalData(data);
+    }
   }, [data]);
 
   const updateWithDebounce = (newData: Education[]) => {
     setLocalData(newData);
+    isEditingRef.current = true;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => onUpdate(newData), 300);
+    timeoutRef.current = setTimeout(() => {
+      onUpdate(newData);
+      isEditingRef.current = false;
+    }, 500);
   };
 
   useEffect(() => {

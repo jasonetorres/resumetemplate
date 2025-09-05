@@ -10,14 +10,17 @@ interface ExperienceEditorProps {
 const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate }) => {
   const [localData, setLocalData] = useState<Experience[]>(data);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isEditingRef = useRef<boolean>(false);
 
-  // Update local state when data prop changes from parent
   useEffect(() => {
-    setLocalData(data);
+    if (!isEditingRef.current) {
+      setLocalData(data);
+    }
   }, [data]);
 
   const updateWithDebounce = (newData: Experience[]) => {
     setLocalData(newData);
+    isEditingRef.current = true;
     
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -25,7 +28,8 @@ const ExperienceEditor: React.FC<ExperienceEditorProps> = ({ data, onUpdate }) =
     
     timeoutRef.current = setTimeout(() => {
       onUpdate(newData);
-    }, 300);
+      isEditingRef.current = false;
+    }, 500);
   };
 
   // Cleanup timeout on unmount

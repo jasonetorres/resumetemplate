@@ -9,23 +9,26 @@ interface TechnicalSkillsEditorProps {
 const TechnicalSkillsEditor: React.FC<TechnicalSkillsEditorProps> = ({ data, onUpdate }) => {
   const [localData, setLocalData] = useState<TechnicalSkills>(data);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isEditingRef = useRef<boolean>(false);
 
-  // Update local state when data prop changes from parent
   useEffect(() => {
-    setLocalData(data);
+    if (!isEditingRef.current) {
+      setLocalData(data);
+    }
   }, [data]);
 
   const handleChange = (field: keyof TechnicalSkills, value: string) => {
     const newData = { ...localData, [field]: value };
     setLocalData(newData);
+    isEditingRef.current = true;
     
-    // Debounce the parent update
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
       onUpdate(newData);
-    }, 300);
+      isEditingRef.current = false;
+    }, 500);
   };
 
   // Cleanup timeout on unmount

@@ -14,18 +14,25 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate })
     content: data.content
   });
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isEditingRef = useRef<boolean>(false);
 
   useEffect(() => {
-    setLocalData({
-      recipientInfo: data.recipientInfo,
-      content: data.content
-    });
+    if (!isEditingRef.current) {
+      setLocalData({
+        recipientInfo: data.recipientInfo,
+        content: data.content
+      });
+    }
   }, [data.recipientInfo, data.content]);
 
   const updateWithDebounce = (newData: Omit<CoverLetterData, 'personalInfo'>) => {
     setLocalData(newData);
+    isEditingRef.current = true;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => onUpdate(newData), 300);
+    timeoutRef.current = setTimeout(() => {
+      onUpdate(newData);
+      isEditingRef.current = false;
+    }, 500);
   };
 
   useEffect(() => {

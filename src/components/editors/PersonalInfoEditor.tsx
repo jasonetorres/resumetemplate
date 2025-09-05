@@ -9,15 +9,19 @@ interface PersonalInfoEditorProps {
 const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate }) => {
   const [localData, setLocalData] = useState<PersonalInfo>(data);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isEditingRef = useRef<boolean>(false);
 
-  // Update local state when data prop changes from parent
+  // Only update local state when data prop changes from parent AND we're not actively editing
   useEffect(() => {
-    setLocalData(data);
+    if (!isEditingRef.current) {
+      setLocalData(data);
+    }
   }, [data]);
 
   const handleChange = (field: keyof PersonalInfo, value: string) => {
     const newData = { ...localData, [field]: value };
     setLocalData(newData);
+    isEditingRef.current = true;
     
     // Debounce the parent update
     if (timeoutRef.current) {
@@ -25,7 +29,8 @@ const PersonalInfoEditor: React.FC<PersonalInfoEditorProps> = ({ data, onUpdate 
     }
     timeoutRef.current = setTimeout(() => {
       onUpdate(newData);
-    }, 300);
+      isEditingRef.current = false;
+    }, 500);
   };
 
   // Cleanup timeout on unmount
