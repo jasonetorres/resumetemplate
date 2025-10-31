@@ -761,75 +761,26 @@ ${data.personalInfo.name}
     setPendingExportAction(null);
   };
 
-  const executeDownloadPDF = async () => {
-    const data = activeTab === 'resume' ? resumeData : coverLetterData;
-    const title = activeTab === 'resume' ? 'Resume' : 'Cover Letter';
-
+  const executeDownloadPDF = () => {
     const htmlContent = generateCleanHTML();
-    if (!htmlContent) return;
+    if (htmlContent) {
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const blobUrl = URL.createObjectURL(blob);
+      const printWindow = window.open(blobUrl, '_blank');
 
-    // Parse the HTML to extract just the body content
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlContent, 'text/html');
-    const bodyContent = doc.body.innerHTML;
-
-    // Create a temporary container with the body content
-    const container = document.createElement('div');
-    container.innerHTML = bodyContent;
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
-    container.style.top = '0';
-    container.style.width = '816px'; // 8.5 inches at 96 DPI
-    container.style.background = 'white';
-    container.style.padding = '72px'; // 0.75 inch padding
-    container.style.fontFamily = 'system-ui, -apple-system, sans-serif';
-    container.style.fontSize = '12px';
-    container.style.lineHeight = '1.5';
-    container.style.color = '#000';
-    document.body.appendChild(container);
-
-    try {
-      // Wait a moment for styles to apply
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Generate canvas from HTML
-      const canvas = await html2canvas(container, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-        windowWidth: 816,
-        windowHeight: container.scrollHeight
-      });
-
-      // Calculate PDF dimensions
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      // Add first page
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      // Add additional pages if needed
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+      if (printWindow) {
+        setTimeout(() => {
+          if (printWindow && !printWindow.closed) {
+            printWindow.print();
+            setTimeout(() => {
+              URL.revokeObjectURL(blobUrl);
+            }, 1000);
+          }
+        }, 1000);
+      } else {
+        URL.revokeObjectURL(blobUrl);
+        alert('Please allow pop-ups to download PDF. Use Print option instead.');
       }
-
-      // Save the PDF
-      pdf.save(`${data.personalInfo.name.replace(/[^a-zA-Z0-9]/g, '_')}_${title.replace(' ', '_')}.pdf`);
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('Failed to generate PDF. Please try again.');
-    } finally {
-      document.body.removeChild(container);
     }
   };
 
@@ -927,18 +878,11 @@ ${data.personalInfo.name}
                   <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-lg shadow-xl border border-slate-200 z-50">
                     <div className="py-2">
                       <button
-                        onClick={() => handleExportConfirm(executeDownloadPDF, 'Download PDF')}
+                        onClick={() => handleExportConfirm(executeDownloadPDF, 'Save as PDF')}
                         className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
                       >
                         <FileDown className="w-4 h-4" />
-                        <span>Download PDF</span>
-                      </button>
-                      <button
-                        onClick={() => handleExportConfirm(executePrint, 'Print')}
-                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
-                      >
-                        <Printer className="w-4 h-4" />
-                        <span>Print</span>
+                        <span>Save as PDF</span>
                       </button>
                       <button
                         onClick={() => handleExportConfirm(executeDownloadHTML, 'Download HTML')}
