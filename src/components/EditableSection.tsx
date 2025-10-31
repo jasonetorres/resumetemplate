@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Edit3, Check, X } from 'lucide-react';
 
 interface EditableSectionProps {
@@ -20,58 +20,6 @@ const EditableSection: React.FC<EditableSectionProps> = ({
   editor,
   children
 }) => {
-  const editorContainerRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isEditing && editorContainerRef.current) {
-      // Focus the first input/textarea in the editor after a small delay
-      setTimeout(() => {
-        const firstInput = editorContainerRef.current?.querySelector('input, textarea') as HTMLElement;
-        if (firstInput) {
-          firstInput.focus();
-        }
-      }, 100);
-    }
-  }, [isEditing]);
-
-  useEffect(() => {
-    if (!isEditing || !containerRef.current) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
-
-      const focusableElements = containerRef.current?.querySelectorAll(
-        'input:not([tabindex="-1"]), textarea:not([tabindex="-1"]), button:not([tabindex="-1"])'
-      );
-
-      if (!focusableElements || focusableElements.length === 0) return;
-
-      const firstElement = focusableElements[0] as HTMLElement;
-      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-      if (e.shiftKey) {
-        // Shift+Tab: moving backwards
-        if (document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement.focus();
-        }
-      } else {
-        // Tab: moving forwards
-        if (document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement.focus();
-        }
-      }
-    };
-
-    containerRef.current.addEventListener('keydown', handleKeyDown);
-    const currentContainer = containerRef.current;
-
-    return () => {
-      currentContainer?.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isEditing]);
   const handleEdit = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -92,11 +40,11 @@ const EditableSection: React.FC<EditableSectionProps> = ({
 
   if (isEditing) {
     return (
-      <div ref={containerRef} className="relative border-2 rounded-2xl p-6 bg-white" style={{ borderColor: '#0044ff' }}>
+      <div className="relative border-2 rounded-2xl p-6 bg-white" style={{ borderColor: '#0044ff' }}>
         <div className="mb-4">
           <h3 className="text-base sm:text-lg font-semibold font-inter text-gray-900">Editing: {title}</h3>
         </div>
-        <div ref={editorContainerRef}>
+        <div>
           {editor}
         </div>
         <div className="flex justify-end space-x-1 sm:space-x-2 mt-4">
