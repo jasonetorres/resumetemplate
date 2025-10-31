@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { FileText, Download, Edit3, Info, FileDown, Printer, FileType, File, Mail } from 'lucide-react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import ResumePreview from './components/ResumePreview';
 import CoverLetterPreview from './components/CoverLetterPreview';
 import ExportConfirmationModal from './components/ExportConfirmationModal';
@@ -759,6 +761,68 @@ ${data.personalInfo.name}
     setPendingExportAction(null);
   };
 
+  const executeDownloadPDF = async () => {
+    const data = activeTab === 'resume' ? resumeData : coverLetterData;
+    const title = activeTab === 'resume' ? 'Resume' : 'Cover Letter';
+
+    const htmlContent = generateCleanHTML();
+    if (!htmlContent) return;
+
+    // Create a temporary container
+    const container = document.createElement('div');
+    container.innerHTML = htmlContent;
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    container.style.width = '816px'; // 8.5 inches at 96 DPI
+    container.style.background = 'white';
+    document.body.appendChild(container);
+
+    const contentElement = container.querySelector('body');
+    if (!contentElement) {
+      document.body.removeChild(container);
+      return;
+    }
+
+    try {
+      // Generate canvas from HTML
+      const canvas = await html2canvas(contentElement as HTMLElement, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      // Calculate PDF dimensions
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Add first page
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // Add additional pages if needed
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // Save the PDF
+      pdf.save(`${data.personalInfo.name.replace(/[^a-zA-Z0-9]/g, '_')}_${title.replace(' ', '_')}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      document.body.removeChild(container);
+    }
+  };
+
   const executePrint = () => {
     const htmlContent = generateCleanHTML();
     if (htmlContent) {
@@ -766,7 +830,7 @@ ${data.personalInfo.name}
       const blob = new Blob([htmlContent], { type: 'text/html' });
       const blobUrl = URL.createObjectURL(blob);
       const printWindow = window.open(blobUrl, '_blank');
-      
+
       if (printWindow) {
         // Wait for content to load then print
         setTimeout(() => {
@@ -853,17 +917,24 @@ ${data.personalInfo.name}
                   <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-lg shadow-xl border border-slate-200 z-50">
                     <div className="py-2">
                       <button
-                        onClick={() => handleExportConfirm(executePrint, 'Print / Save as PDF')}
+                        onClick={() => handleExportConfirm(executeDownloadPDF, 'Download PDF')}
+                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
+                      >
+                        <FileDown className="w-4 h-4" />
+                        <span>Download PDF</span>
+                      </button>
+                      <button
+                        onClick={() => handleExportConfirm(executePrint, 'Print')}
                         className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
                       >
                         <Printer className="w-4 h-4" />
-                        <span>Print / Save as PDF</span>
+                        <span>Print</span>
                       </button>
                       <button
                         onClick={() => handleExportConfirm(executeDownloadHTML, 'Download HTML')}
                         className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
                       >
-                        <FileDown className="w-4 h-4" />
+                        <FileType className="w-4 h-4" />
                         <span>Download HTML</span>
                       </button>
                       <button
