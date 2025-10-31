@@ -14,52 +14,76 @@ export const generateResumePDF = (data: ResumeData) => {
   pdf.text(data.personalInfo.name || 'Untitled Resume', pageWidth / 2, yPos, { align: 'center' });
   yPos += 8;
 
-  // Contact Info
+  // Contact Info - stack vertically for better formatting
   pdf.setFontSize(10);
   pdf.setFont('helvetica', 'normal');
-  const contactInfo = [
+  const contactItems = [
     data.personalInfo.email,
     data.personalInfo.phone,
-    data.personalInfo.location,
     data.personalInfo.linkedin,
     data.personalInfo.github,
     data.personalInfo.website
-  ].filter(Boolean).join(' | ');
-  if (contactInfo) {
-    pdf.text(contactInfo, pageWidth / 2, yPos, { align: 'center' });
-  }
-  yPos += 10;
+  ].filter(Boolean);
+
+  contactItems.forEach(item => {
+    pdf.text(item, pageWidth / 2, yPos, { align: 'center' });
+    yPos += 4;
+  });
+  yPos += 6;
 
   // Professional Summary
   if (data.professionalSummary) {
-    pdf.setFontSize(14);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('PROFESSIONAL SUMMARY', margin, yPos);
-    yPos += 6;
+    const summaryContent = typeof data.professionalSummary === 'object' && data.professionalSummary.content
+      ? data.professionalSummary.content
+      : typeof data.professionalSummary === 'string'
+      ? data.professionalSummary
+      : '';
 
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'normal');
-    const summaryLines = pdf.splitTextToSize(data.professionalSummary, contentWidth);
-    pdf.text(summaryLines, margin, yPos);
-    yPos += summaryLines.length * 5 + 6;
+    if (summaryContent) {
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('PROFESSIONAL SUMMARY', margin, yPos);
+      yPos += 6;
+
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      const summaryLines = pdf.splitTextToSize(summaryContent, contentWidth);
+      pdf.text(summaryLines, margin, yPos);
+      yPos += summaryLines.length * 5 + 6;
+    }
   }
 
   // Technical Skills
-  if (data.technicalSkills && data.technicalSkills.length > 0) {
-    pdf.setFontSize(14);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('TECHNICAL SKILLS', margin, yPos);
-    yPos += 6;
+  if (data.technicalSkills && typeof data.technicalSkills === 'object') {
+    const hasSkills = Object.values(data.technicalSkills).some(skill => skill && String(skill).trim());
 
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'normal');
-    data.technicalSkills.forEach(skill => {
-      const skillText = `${skill.category}: ${skill.items.join(', ')}`;
-      const skillLines = pdf.splitTextToSize(skillText, contentWidth);
-      pdf.text(skillLines, margin, yPos);
-      yPos += skillLines.length * 5 + 2;
-    });
-    yPos += 4;
+    if (hasSkills) {
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('TECHNICAL SKILLS', margin, yPos);
+      yPos += 6;
+
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+
+      const skillCategories = [
+        { label: 'Languages', value: data.technicalSkills.languages },
+        { label: 'Frameworks & Libraries', value: data.technicalSkills.frameworks },
+        { label: 'Tools & Platforms', value: data.technicalSkills.tools },
+        { label: 'Methodologies', value: data.technicalSkills.methodologies },
+        { label: 'Certifications', value: data.technicalSkills.certifications }
+      ];
+
+      skillCategories.forEach(({ label, value }) => {
+        if (value && String(value).trim()) {
+          const skillText = `${label}: ${value}`;
+          const skillLines = pdf.splitTextToSize(skillText, contentWidth);
+          pdf.text(skillLines, margin, yPos);
+          yPos += skillLines.length * 5 + 2;
+        }
+      });
+      yPos += 4;
+    }
   }
 
   // Experience
@@ -145,9 +169,15 @@ export const generateResumePDF = (data: ResumeData) => {
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
       if (project.description) {
-        const descLines = pdf.splitTextToSize(project.description, contentWidth);
-        pdf.text(descLines, margin, yPos);
-        yPos += descLines.length * 5 + 4;
+        const descriptions = Array.isArray(project.description) ? project.description : [project.description];
+        descriptions.forEach(desc => {
+          if (desc) {
+            const bulletLines = pdf.splitTextToSize(`• ${desc}`, contentWidth - 5);
+            pdf.text(bulletLines, margin + 2, yPos);
+            yPos += bulletLines.length * 5;
+          }
+        });
+        yPos += 4;
       }
     });
   }
@@ -174,28 +204,16 @@ export const generateResumePDF = (data: ResumeData) => {
 
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
-      const schoolLine = [edu.school, edu.location].filter(Boolean).join(' | ');
-      if (schoolLine) {
-        pdf.text(schoolLine, margin, yPos);
+      if (edu.institution) {
+        pdf.text(edu.institution, margin, yPos);
         yPos += 5;
       }
 
-      if (edu.graduationDate) {
-        pdf.text(edu.graduationDate, margin, yPos);
+      if (edu.duration) {
+        pdf.text(edu.duration, margin, yPos);
         yPos += 4;
       }
 
-      if (edu.gpa) {
-        pdf.text(`GPA: ${edu.gpa}`, margin, yPos);
-        yPos += 4;
-      }
-
-      if (edu.relevantCourses) {
-        const coursesText = `Relevant Courses: ${edu.relevantCourses}`;
-        const coursesLines = pdf.splitTextToSize(coursesText, contentWidth);
-        pdf.text(coursesLines, margin, yPos);
-        yPos += coursesLines.length * 5;
-      }
       yPos += 4;
     });
   }
