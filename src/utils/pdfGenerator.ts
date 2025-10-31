@@ -263,84 +263,94 @@ export const generateCoverLetterPDF = (data: CoverLetterData) => {
   let yPos = margin;
 
   // Personal Info
-  pdf.setFontSize(12);
+  pdf.setFontSize(16);
   pdf.setFont('helvetica', 'bold');
   if (data.personalInfo.name) {
     pdf.text(data.personalInfo.name, margin, yPos);
-    yPos += 5;
+    yPos += 6;
   }
 
   pdf.setFontSize(10);
   pdf.setFont('helvetica', 'normal');
-  if (data.personalInfo.email) {
-    pdf.text(data.personalInfo.email, margin, yPos);
-    yPos += 5;
-  }
-  if (data.personalInfo.phone) {
-    pdf.text(data.personalInfo.phone, margin, yPos);
-    yPos += 5;
-  }
-  if (data.personalInfo.location) {
-    pdf.text(data.personalInfo.location, margin, yPos);
-    yPos += 8;
+
+  const contactInfo = [
+    data.personalInfo.email,
+    data.personalInfo.phone,
+    data.personalInfo.linkedin,
+    data.personalInfo.github
+  ].filter(Boolean).join(' | ');
+
+  if (contactInfo) {
+    pdf.text(contactInfo, margin, yPos);
+    yPos += 10;
   }
 
   // Date
-  if (data.date) {
-    pdf.text(data.date, margin, yPos);
+  if (data.recipientInfo.date) {
+    pdf.text(data.recipientInfo.date, margin, yPos);
     yPos += 10;
   }
 
   // Recipient Info
-  if (data.recipientName) {
-    pdf.text(data.recipientName, margin, yPos);
+  if (data.recipientInfo.hiringManager) {
+    pdf.text(data.recipientInfo.hiringManager, margin, yPos);
     yPos += 5;
   }
-  if (data.recipientTitle) {
-    pdf.text(data.recipientTitle, margin, yPos);
+  if (data.recipientInfo.position) {
+    pdf.text(data.recipientInfo.position, margin, yPos);
     yPos += 5;
   }
-  if (data.companyName) {
-    pdf.text(data.companyName, margin, yPos);
-    yPos += 5;
-  }
-  if (data.companyAddress) {
-    pdf.text(data.companyAddress, margin, yPos);
+  if (data.recipientInfo.company) {
+    pdf.text(data.recipientInfo.company, margin, yPos);
     yPos += 10;
   }
 
   // Salutation
-  if (data.salutation) {
-    pdf.text(data.salutation, margin, yPos);
-    yPos += 8;
+  const salutation = `Dear ${data.recipientInfo.hiringManager || 'Hiring Manager'},`;
+  pdf.text(salutation, margin, yPos);
+  yPos += 8;
+
+  // Opening paragraph
+  if (data.content.opening) {
+    const openingLines = pdf.splitTextToSize(data.content.opening, contentWidth);
+    pdf.text(openingLines, margin, yPos);
+    yPos += openingLines.length * 5 + 6;
   }
 
   // Body paragraphs
-  if (data.bodyParagraphs && data.bodyParagraphs.length > 0) {
-    data.bodyParagraphs.forEach((paragraph, index) => {
+  if (data.content.body) {
+    // Split by double newlines to maintain paragraph structure
+    const paragraphs = data.content.body.split('\n\n');
+
+    paragraphs.forEach((paragraph) => {
       if (yPos > 260) {
         pdf.addPage();
         yPos = margin;
       }
 
-      if (paragraph) {
-        const lines = pdf.splitTextToSize(paragraph, contentWidth);
+      if (paragraph.trim()) {
+        const lines = pdf.splitTextToSize(paragraph.trim(), contentWidth);
         pdf.text(lines, margin, yPos);
         yPos += lines.length * 5 + 6;
       }
     });
   }
 
-  // Closing
+  // Closing paragraph
   if (yPos > 260) {
     pdf.addPage();
     yPos = margin;
   }
 
-  if (data.closing) {
-    pdf.text(data.closing, margin, yPos);
-    yPos += 10;
+  if (data.content.closing) {
+    const closingLines = pdf.splitTextToSize(data.content.closing, contentWidth);
+    pdf.text(closingLines, margin, yPos);
+    yPos += closingLines.length * 5 + 8;
   }
+
+  // Sign-off
+  pdf.text('Sincerely,', margin, yPos);
+  yPos += 10;
 
   if (data.personalInfo.name) {
     pdf.text(data.personalInfo.name, margin, yPos);
