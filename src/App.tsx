@@ -768,28 +768,38 @@ ${data.personalInfo.name}
     const htmlContent = generateCleanHTML();
     if (!htmlContent) return;
 
-    // Create a temporary container
+    // Parse the HTML to extract just the body content
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    const bodyContent = doc.body.innerHTML;
+
+    // Create a temporary container with the body content
     const container = document.createElement('div');
-    container.innerHTML = htmlContent;
+    container.innerHTML = bodyContent;
     container.style.position = 'absolute';
     container.style.left = '-9999px';
+    container.style.top = '0';
     container.style.width = '816px'; // 8.5 inches at 96 DPI
     container.style.background = 'white';
+    container.style.padding = '72px'; // 0.75 inch padding
+    container.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+    container.style.fontSize = '12px';
+    container.style.lineHeight = '1.5';
+    container.style.color = '#000';
     document.body.appendChild(container);
 
-    const contentElement = container.querySelector('body');
-    if (!contentElement) {
-      document.body.removeChild(container);
-      return;
-    }
-
     try {
+      // Wait a moment for styles to apply
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // Generate canvas from HTML
-      const canvas = await html2canvas(contentElement as HTMLElement, {
+      const canvas = await html2canvas(container, {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        windowWidth: 816,
+        windowHeight: container.scrollHeight
       });
 
       // Calculate PDF dimensions
