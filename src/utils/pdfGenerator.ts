@@ -113,7 +113,7 @@ export const generateResumePDF = (data: ResumeData) => {
     pdf.setDrawColor(0, 0, 0);
     pdf.setLineWidth(0.3);
     pdf.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 3;
+    yPos += 4.5;
 
     data.experience.forEach((exp, index) => {
       // Check if we need a new page
@@ -172,7 +172,7 @@ export const generateResumePDF = (data: ResumeData) => {
     pdf.setDrawColor(0, 0, 0);
     pdf.setLineWidth(0.3);
     pdf.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 3;
+    yPos += 4.5;
 
     data.projects.forEach((project, index) => {
       if (yPos > 260) {
@@ -226,7 +226,7 @@ export const generateResumePDF = (data: ResumeData) => {
     pdf.setDrawColor(0, 0, 0);
     pdf.setLineWidth(0.3);
     pdf.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 3;
+    yPos += 4.5;
 
     data.education.forEach((edu, index) => {
       pdf.setFontSize(11);
