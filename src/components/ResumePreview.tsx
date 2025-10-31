@@ -96,7 +96,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
             <button
               ref={buttonRef}
               onClick={() => setShowModal(!showModal)}
-              className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg text-sm font-medium transition-all duration-200 hover:from-amber-600 hover:to-orange-600 hover:shadow-md hover:-translate-y-0.5 shadow-sm"
+              className="inline-flex items-center space-x-2 px-4 py-2 bg-slate-700 text-white rounded-md text-sm font-medium transition-all duration-200 hover:bg-slate-600 hover:shadow-md shadow-sm"
             >
               <span>💡 Tips for {sectionName}</span>
             </button>
@@ -105,9 +105,9 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
             {showModal && (
               <div
                 ref={modalRef}
-                className="absolute left-0 top-full mt-2 bg-white rounded-xl shadow-2xl border border-slate-200 max-w-2xl w-full max-h-[500px] overflow-y-auto z-50"
+                className="absolute left-0 top-full mt-2 bg-white rounded-lg shadow-xl border border-slate-200 max-w-2xl w-full max-h-[500px] overflow-y-auto z-50"
               >
-                <div className="p-4 border-b border-slate-200 bg-gradient-to-r from-amber-50 to-orange-50">
+                <div className="p-4 border-b border-slate-200 bg-slate-50">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-bold text-slate-800">💡 Tips for {sectionName}</h3>
                     <button
@@ -160,7 +160,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 text-center">{data.personalInfo.name}</h1>
               <button
                 onClick={() => handleEdit('personal')}
-                className="ml-2 sm:ml-3 flex items-center space-x-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:from-blue-600 hover:to-cyan-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 shadow-sm"
+                className="ml-2 sm:ml-3 flex items-center space-x-1 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-slate-800 hover:shadow-md transition-all duration-200 shadow-sm"
               >
                 <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Edit</span>
@@ -207,7 +207,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               </h3>
               <button
                 onClick={() => handleEdit('summary')}
-                className="flex items-center space-x-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:from-blue-600 hover:to-cyan-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ml-2 shadow-sm"
+                className="flex items-center space-x-1 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-slate-800 hover:shadow-md transition-all duration-200 ml-2 shadow-sm"
               >
                 <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Edit</span>
@@ -242,7 +242,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               </h3>
               <button
                 onClick={() => handleEdit('skills')}
-                className="flex items-center space-x-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:from-blue-600 hover:to-cyan-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ml-2 shadow-sm"
+                className="flex items-center space-x-1 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-slate-800 hover:shadow-md transition-all duration-200 ml-2 shadow-sm"
               >
                 <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Edit</span>
@@ -312,7 +312,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               </h3>
               <button
                 onClick={() => handleEdit('experience')}
-                className="flex items-center space-x-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:from-blue-600 hover:to-cyan-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ml-2 shadow-sm"
+                className="flex items-center space-x-1 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-slate-800 hover:shadow-md transition-all duration-200 ml-2 shadow-sm"
               >
                 <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Edit</span>
@@ -368,7 +368,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
                 </h3>
                 <button
                   onClick={() => handleEdit('projects')}
-                  className="flex items-center space-x-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:from-blue-600 hover:to-cyan-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ml-2 shadow-sm"
+                  className="flex items-center space-x-1 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-slate-800 hover:shadow-md transition-all duration-200 ml-2 shadow-sm"
                 >
                   <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline">Edit</span>
@@ -412,7 +412,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
         <div className="mb-6">
           <button
             onClick={() => handleEdit('projects')}
-            className="w-full py-3 border-2 border-dashed border-slate-300 rounded-xl text-slate-600 hover:text-blue-600 hover:border-blue-400 hover:bg-blue-50/50 hover:shadow-sm transition-all duration-200 flex items-center justify-center space-x-2"
+            className="w-full py-3 border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:text-slate-900 hover:border-slate-400 hover:bg-slate-50 transition-all duration-200 flex items-center justify-center space-x-2"
           >
             <span>+ Add Projects Section</span>
           </button>
@@ -443,7 +443,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
                 </h3>
                 <button
                   onClick={() => handleEdit('education')}
-                  className="flex items-center space-x-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:from-blue-600 hover:to-cyan-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ml-2 shadow-sm"
+                  className="flex items-center space-x-1 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-slate-800 hover:shadow-md transition-all duration-200 ml-2 shadow-sm"
                 >
                   <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline">Edit</span>
@@ -473,7 +473,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
         <div className="mb-4">
           <button
             onClick={() => handleEdit('education')}
-            className="w-full py-3 border-2 border-dashed border-slate-300 rounded-xl text-slate-600 hover:text-blue-600 hover:border-blue-400 hover:bg-blue-50/50 hover:shadow-sm transition-all duration-200 flex items-center justify-center space-x-2"
+            className="w-full py-3 border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:text-slate-900 hover:border-slate-400 hover:bg-slate-50 transition-all duration-200 flex items-center justify-center space-x-2"
           >
             <span>+ Add Education Section</span>
           </button>

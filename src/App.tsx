@@ -816,33 +816,33 @@ ${data.personalInfo.name}
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
+      <div className="bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 sm:space-x-3">
               <img src="/toetovf.png" alt="Torc Logo" className="w-8 h-8" />
-              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Torc Resume & Cover Letter</h1>
+              <h1 className="text-lg sm:text-2xl font-bold text-slate-900">Torc Resume & Cover Letter</h1>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <button
                 onClick={() => setShowGuidance(!showGuidance)}
-                className="hidden sm:flex items-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:from-blue-600 hover:to-cyan-600 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 font-medium text-sm sm:text-base shadow-md"
+                className="hidden sm:flex items-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 hover:shadow-md transition-all duration-200 font-medium text-sm sm:text-base shadow-sm"
               >
                 <Info className="w-4 h-4" />
                 <span>{showGuidance ? 'Hide' : 'Show'} Guidance</span>
               </button>
               <button
                 onClick={() => setShowGuidance(!showGuidance)}
-                className="sm:hidden flex items-center px-3 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:from-blue-600 hover:to-cyan-600 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 font-medium text-sm shadow-md"
+                className="sm:hidden flex items-center px-3 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 hover:shadow-md transition-all duration-200 font-medium text-sm shadow-sm"
               >
                 <Info className="w-4 h-4" />
               </button>
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl hover:from-emerald-600 hover:to-teal-600 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 font-medium text-sm sm:text-base shadow-md"
+                  className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-6 py-2 sm:py-3 bg-slate-700 text-white rounded-lg hover:bg-slate-600 hover:shadow-md transition-all duration-200 font-medium text-sm sm:text-base shadow-sm"
                 >
                   <Download className="w-4 h-4" />
                   <span className="hidden sm:inline">Export {activeTab === 'resume' ? 'Resume' : 'Cover Letter'}</span>
@@ -850,39 +850,39 @@ ${data.personalInfo.name}
                 </button>
 
                 {showExportMenu && (
-                  <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-xl shadow-2xl border border-slate-200 z-50">
+                  <div className="absolute right-0 mt-2 w-48 sm:w-56 bg-white rounded-lg shadow-xl border border-slate-200 z-50">
                     <div className="py-2">
                       <button
                         onClick={() => handleExportConfirm(executePrint, 'Print / Save as PDF')}
-                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 flex items-center space-x-2 font-medium transition-all duration-200 text-sm sm:text-base rounded-lg mx-1"
+                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
                       >
                         <Printer className="w-4 h-4" />
                         <span>Print / Save as PDF</span>
                       </button>
                       <button
                         onClick={() => handleExportConfirm(executeDownloadHTML, 'Download HTML')}
-                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 flex items-center space-x-2 font-medium transition-all duration-200 text-sm sm:text-base rounded-lg mx-1"
+                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
                       >
                         <FileDown className="w-4 h-4" />
                         <span>Download HTML</span>
                       </button>
                       <button
                         onClick={() => handleExportConfirm(executeOpenInNewTab, 'Open in New Tab')}
-                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 flex items-center space-x-2 font-medium transition-all duration-200 text-sm sm:text-base rounded-lg mx-1"
+                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
                       >
                         <FileType className="w-4 h-4" />
                         <span>Open in New Tab</span>
                       </button>
                       <button
                         onClick={() => handleExportConfirm(executeDownloadWord, 'Download as Word')}
-                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 flex items-center space-x-2 font-medium transition-all duration-200 text-sm sm:text-base rounded-lg mx-1"
+                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
                       >
                         <FileText className="w-4 h-4" />
                         <span>Download as Word</span>
                       </button>
                       <button
                         onClick={() => handleExportConfirm(executeDownloadText, 'Download as Text')}
-                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 flex items-center space-x-2 font-medium transition-all duration-200 text-sm sm:text-base rounded-lg mx-1"
+                        className="w-full text-left px-4 py-3 text-slate-700 hover:bg-slate-100 flex items-center space-x-2 font-medium transition-colors duration-200 text-sm sm:text-base"
                       >
                         <File className="w-4 h-4" />
                         <span>Download as Text</span>
@@ -900,16 +900,16 @@ ${data.personalInfo.name}
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 sm:py-10">
         {/* Tab Navigation */}
         <div className="mb-8">
-          <div className="flex space-x-2 bg-white/60 backdrop-blur-sm p-1.5 rounded-xl max-w-md mx-auto shadow-md border border-slate-200">
+          <div className="flex space-x-2 bg-white p-1.5 rounded-lg max-w-md mx-auto shadow-sm border border-slate-200">
             <button
               onClick={() => {
                 setActiveTab('resume');
                 setComponentKey(prev => prev + 1);
               }}
-              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 text-sm sm:text-base ${
+              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-md font-medium transition-all duration-200 text-sm sm:text-base ${
                 activeTab === 'resume'
-                  ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <FileText className="w-4 h-4" />
@@ -920,10 +920,10 @@ ${data.personalInfo.name}
                 setActiveTab('cover-letter');
                 setComponentKey(prev => prev + 1);
               }}
-              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 text-sm sm:text-base ${
+              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-md font-medium transition-all duration-200 text-sm sm:text-base ${
                 activeTab === 'cover-letter'
-                  ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               <Mail className="w-4 h-4" />
@@ -932,18 +932,16 @@ ${data.personalInfo.name}
           </div>
         </div>
 
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-cyan-50 to-slate-100 rounded-3xl blur-3xl opacity-40"></div>
-          <div className="relative bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 p-6 sm:p-8">
-            <div className="mb-6 pb-4 border-b border-slate-200">
-              <h2 className="text-lg sm:text-xl font-semibold flex items-center space-x-2 text-slate-800">
-                <Edit3 className="w-5 h-5 text-blue-600" />
-                <span>Click any section to edit your {activeTab === 'resume' ? 'resume' : 'cover letter'}</span>
-              </h2>
-              <p className="text-slate-600 mt-1 text-sm sm:text-base">
-                Your {activeTab === 'resume' ? 'resume' : 'cover letter'} will update in real-time as you make changes
-              </p>
-            </div>
+        <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6 sm:p-8">
+          <div className="mb-6 pb-4 border-b border-slate-200">
+            <h2 className="text-lg sm:text-xl font-semibold flex items-center space-x-2 text-slate-800">
+              <Edit3 className="w-5 h-5 text-slate-600" />
+              <span>Click any section to edit your {activeTab === 'resume' ? 'resume' : 'cover letter'}</span>
+            </h2>
+            <p className="text-slate-600 mt-1 text-sm sm:text-base">
+              Your {activeTab === 'resume' ? 'resume' : 'cover letter'} will update in real-time as you make changes
+            </p>
+          </div>
             {activeTab === 'resume' ? (
               <ResumePreview
                 data={resumeData}
@@ -957,7 +955,6 @@ ${data.personalInfo.name}
                 showGuidance={showGuidance}
               />
             )}
-          </div>
         </div>
       </div>
 
