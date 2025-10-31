@@ -53,7 +53,7 @@ export const generateResumePDF = (data: ResumeData) => {
       pdf.setDrawColor(0, 0, 0);
       pdf.setLineWidth(0.3);
       pdf.line(margin, yPos, pageWidth - margin, yPos);
-      yPos += 3;
+      yPos += 4.5;
 
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
@@ -77,7 +77,7 @@ export const generateResumePDF = (data: ResumeData) => {
       pdf.setDrawColor(0, 0, 0);
       pdf.setLineWidth(0.3);
       pdf.line(margin, yPos, pageWidth - margin, yPos);
-      yPos += 3;
+      yPos += 4.5;
 
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
