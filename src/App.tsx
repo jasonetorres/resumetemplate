@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { FileText, Download, Edit3, Info, FileDown, Printer, FileType, File, Mail } from 'lucide-react';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import ResumePreview from './components/ResumePreview';
 import CoverLetterPreview from './components/CoverLetterPreview';
 import ExportConfirmationModal from './components/ExportConfirmationModal';
 import { ResumeData, CoverLetterData } from './types/resume';
+import { generateResumePDF, generateCoverLetterPDF } from './utils/pdfGenerator';
 
 const initialResumeData: ResumeData = {
   personalInfo: {
@@ -762,25 +761,19 @@ ${data.personalInfo.name}
   };
 
   const executeDownloadPDF = () => {
-    const htmlContent = generateCleanHTML();
-    if (htmlContent) {
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-      const blobUrl = URL.createObjectURL(blob);
-      const printWindow = window.open(blobUrl, '_blank');
+    try {
+      const pdf = activeTab === 'resume'
+        ? generateResumePDF(resumeData)
+        : generateCoverLetterPDF(coverLetterData);
 
-      if (printWindow) {
-        setTimeout(() => {
-          if (printWindow && !printWindow.closed) {
-            printWindow.print();
-            setTimeout(() => {
-              URL.revokeObjectURL(blobUrl);
-            }, 1000);
-          }
-        }, 1000);
-      } else {
-        URL.revokeObjectURL(blobUrl);
-        alert('Please allow pop-ups to download PDF. Use Print option instead.');
-      }
+      const data = activeTab === 'resume' ? resumeData : coverLetterData;
+      const title = activeTab === 'resume' ? 'Resume' : 'Cover_Letter';
+      const filename = `${data.personalInfo.name.replace(/[^a-zA-Z0-9]/g, '_')}_${title}.pdf`;
+
+      pdf.save(filename);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
     }
   };
 
