@@ -11,7 +11,7 @@ export const generateResumePDF = (data: ResumeData) => {
   // Name
   pdf.setFontSize(24);
   pdf.setFont('helvetica', 'bold');
-  pdf.text(data.personalInfo.name, pageWidth / 2, yPos, { align: 'center' });
+  pdf.text(data.personalInfo.name || 'Untitled Resume', pageWidth / 2, yPos, { align: 'center' });
   yPos += 8;
 
   // Contact Info
@@ -25,7 +25,9 @@ export const generateResumePDF = (data: ResumeData) => {
     data.personalInfo.github,
     data.personalInfo.website
   ].filter(Boolean).join(' | ');
-  pdf.text(contactInfo, pageWidth / 2, yPos, { align: 'center' });
+  if (contactInfo) {
+    pdf.text(contactInfo, pageWidth / 2, yPos, { align: 'center' });
+  }
   yPos += 10;
 
   // Professional Summary
@@ -76,23 +78,32 @@ export const generateResumePDF = (data: ResumeData) => {
 
       pdf.setFontSize(11);
       pdf.setFont('helvetica', 'bold');
-      pdf.text(exp.position, margin, yPos);
-      yPos += 5;
+      if (exp.position) {
+        pdf.text(exp.position, margin, yPos);
+        yPos += 5;
+      }
 
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'italic');
-      pdf.text(`${exp.company} | ${exp.location}`, margin, yPos);
-      yPos += 5;
+      const companyLine = [exp.company, exp.location].filter(Boolean).join(' | ');
+      if (companyLine) {
+        pdf.text(companyLine, margin, yPos);
+        yPos += 5;
+      }
 
       pdf.setFont('helvetica', 'normal');
-      pdf.text(exp.duration, margin, yPos);
-      yPos += 6;
+      if (exp.duration) {
+        pdf.text(exp.duration, margin, yPos);
+        yPos += 6;
+      }
 
       if (exp.achievements && exp.achievements.length > 0) {
         exp.achievements.forEach(achievement => {
-          const bulletLines = pdf.splitTextToSize(`• ${achievement}`, contentWidth - 5);
-          pdf.text(bulletLines, margin + 2, yPos);
-          yPos += bulletLines.length * 5;
+          if (achievement) {
+            const bulletLines = pdf.splitTextToSize(`• ${achievement}`, contentWidth - 5);
+            pdf.text(bulletLines, margin + 2, yPos);
+            yPos += bulletLines.length * 5;
+          }
         });
       }
       yPos += 4;
@@ -119,8 +130,10 @@ export const generateResumePDF = (data: ResumeData) => {
 
       pdf.setFontSize(11);
       pdf.setFont('helvetica', 'bold');
-      pdf.text(project.name, margin, yPos);
-      yPos += 5;
+      if (project.name) {
+        pdf.text(project.name, margin, yPos);
+        yPos += 5;
+      }
 
       if (project.technologies) {
         pdf.setFontSize(9);
@@ -131,9 +144,11 @@ export const generateResumePDF = (data: ResumeData) => {
 
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
-      const descLines = pdf.splitTextToSize(project.description, contentWidth);
-      pdf.text(descLines, margin, yPos);
-      yPos += descLines.length * 5 + 4;
+      if (project.description) {
+        const descLines = pdf.splitTextToSize(project.description, contentWidth);
+        pdf.text(descLines, margin, yPos);
+        yPos += descLines.length * 5 + 4;
+      }
     });
   }
 
@@ -152,16 +167,23 @@ export const generateResumePDF = (data: ResumeData) => {
     data.education.forEach((edu, index) => {
       pdf.setFontSize(11);
       pdf.setFont('helvetica', 'bold');
-      pdf.text(edu.degree, margin, yPos);
-      yPos += 5;
+      if (edu.degree) {
+        pdf.text(edu.degree, margin, yPos);
+        yPos += 5;
+      }
 
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
-      pdf.text(`${edu.school} | ${edu.location}`, margin, yPos);
-      yPos += 5;
+      const schoolLine = [edu.school, edu.location].filter(Boolean).join(' | ');
+      if (schoolLine) {
+        pdf.text(schoolLine, margin, yPos);
+        yPos += 5;
+      }
 
-      pdf.text(edu.graduationDate, margin, yPos);
-      yPos += 4;
+      if (edu.graduationDate) {
+        pdf.text(edu.graduationDate, margin, yPos);
+        yPos += 4;
+      }
 
       if (edu.gpa) {
         pdf.text(`GPA: ${edu.gpa}`, margin, yPos);
@@ -191,8 +213,10 @@ export const generateCoverLetterPDF = (data: CoverLetterData) => {
   // Personal Info
   pdf.setFontSize(12);
   pdf.setFont('helvetica', 'bold');
-  pdf.text(data.personalInfo.name, margin, yPos);
-  yPos += 5;
+  if (data.personalInfo.name) {
+    pdf.text(data.personalInfo.name, margin, yPos);
+    yPos += 5;
+  }
 
   pdf.setFontSize(10);
   pdf.setFont('helvetica', 'normal');
@@ -210,8 +234,10 @@ export const generateCoverLetterPDF = (data: CoverLetterData) => {
   }
 
   // Date
-  pdf.text(data.date, margin, yPos);
-  yPos += 10;
+  if (data.date) {
+    pdf.text(data.date, margin, yPos);
+    yPos += 10;
+  }
 
   // Recipient Info
   if (data.recipientName) {
@@ -232,20 +258,26 @@ export const generateCoverLetterPDF = (data: CoverLetterData) => {
   }
 
   // Salutation
-  pdf.text(data.salutation, margin, yPos);
-  yPos += 8;
+  if (data.salutation) {
+    pdf.text(data.salutation, margin, yPos);
+    yPos += 8;
+  }
 
   // Body paragraphs
-  data.bodyParagraphs.forEach((paragraph, index) => {
-    if (yPos > 260) {
-      pdf.addPage();
-      yPos = margin;
-    }
+  if (data.bodyParagraphs && data.bodyParagraphs.length > 0) {
+    data.bodyParagraphs.forEach((paragraph, index) => {
+      if (yPos > 260) {
+        pdf.addPage();
+        yPos = margin;
+      }
 
-    const lines = pdf.splitTextToSize(paragraph, contentWidth);
-    pdf.text(lines, margin, yPos);
-    yPos += lines.length * 5 + 6;
-  });
+      if (paragraph) {
+        const lines = pdf.splitTextToSize(paragraph, contentWidth);
+        pdf.text(lines, margin, yPos);
+        yPos += lines.length * 5 + 6;
+      }
+    });
+  }
 
   // Closing
   if (yPos > 260) {
@@ -253,10 +285,14 @@ export const generateCoverLetterPDF = (data: CoverLetterData) => {
     yPos = margin;
   }
 
-  pdf.text(data.closing, margin, yPos);
-  yPos += 10;
+  if (data.closing) {
+    pdf.text(data.closing, margin, yPos);
+    yPos += 10;
+  }
 
-  pdf.text(data.personalInfo.name, margin, yPos);
+  if (data.personalInfo.name) {
+    pdf.text(data.personalInfo.name, margin, yPos);
+  }
 
   return pdf;
 };
