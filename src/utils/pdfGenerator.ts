@@ -262,28 +262,8 @@ export const generateCoverLetterPDF = (data: CoverLetterData) => {
   const contentWidth = pageWidth - (margin * 2);
   let yPos = margin;
 
-  // Personal Info
-  pdf.setFontSize(16);
-  pdf.setFont('helvetica', 'bold');
-  if (data.personalInfo.name) {
-    pdf.text(data.personalInfo.name, margin, yPos);
-    yPos += 6;
-  }
-
   pdf.setFontSize(10);
   pdf.setFont('helvetica', 'normal');
-
-  const contactInfo = [
-    data.personalInfo.email,
-    data.personalInfo.phone,
-    data.personalInfo.linkedin,
-    data.personalInfo.github
-  ].filter(Boolean).join(' | ');
-
-  if (contactInfo) {
-    pdf.text(contactInfo, margin, yPos);
-    yPos += 10;
-  }
 
   // Date
   if (data.recipientInfo.date) {
@@ -352,8 +332,30 @@ export const generateCoverLetterPDF = (data: CoverLetterData) => {
   pdf.text('Sincerely,', margin, yPos);
   yPos += 10;
 
+  // Name
   if (data.personalInfo.name) {
     pdf.text(data.personalInfo.name, margin, yPos);
+    yPos += 5;
+  }
+
+  // Contact info below signature
+  const contactInfo = [
+    data.personalInfo.email,
+    data.personalInfo.phone
+  ].filter(Boolean).join(' | ');
+
+  if (contactInfo) {
+    pdf.text(contactInfo, margin, yPos);
+    yPos += 4;
+  }
+
+  const webInfo = [
+    data.personalInfo.linkedin,
+    data.personalInfo.github
+  ].filter(Boolean).join(' | ');
+
+  if (webInfo) {
+    pdf.text(webInfo, margin, yPos);
   }
 
   return pdf;
