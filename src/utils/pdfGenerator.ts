@@ -44,16 +44,16 @@ export const generateResumePDF = (data: ResumeData) => {
       : '';
 
     if (summaryContent) {
-      // Add line above section
-      pdf.setDrawColor(200, 200, 200);
-      pdf.setLineWidth(0.5);
-      pdf.line(margin, yPos, pageWidth - margin, yPos);
-      yPos += 3;
-
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
       pdf.text('PROFESSIONAL SUMMARY', margin, yPos);
-      yPos += 4.5;
+      yPos += 2;
+
+      // Add line below section title
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.3);
+      pdf.line(margin, yPos, pageWidth - margin, yPos);
+      yPos += 3;
 
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
@@ -68,16 +68,16 @@ export const generateResumePDF = (data: ResumeData) => {
     const hasSkills = Object.values(data.technicalSkills).some(skill => skill && String(skill).trim());
 
     if (hasSkills) {
-      // Add line above section
-      pdf.setDrawColor(200, 200, 200);
-      pdf.setLineWidth(0.5);
-      pdf.line(margin, yPos, pageWidth - margin, yPos);
-      yPos += 3;
-
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
       pdf.text('TECHNICAL SKILLS', margin, yPos);
-      yPos += 4.5;
+      yPos += 2;
+
+      // Add line below section title
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.3);
+      pdf.line(margin, yPos, pageWidth - margin, yPos);
+      yPos += 3;
 
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
@@ -104,16 +104,16 @@ export const generateResumePDF = (data: ResumeData) => {
 
   // Experience
   if (data.experience && data.experience.length > 0) {
-    // Add line above section
-    pdf.setDrawColor(200, 200, 200);
-    pdf.setLineWidth(0.5);
-    pdf.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 3;
-
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
     pdf.text('EXPERIENCE', margin, yPos);
-    yPos += 4.5;
+    yPos += 2;
+
+    // Add line below section title
+    pdf.setDrawColor(0, 0, 0);
+    pdf.setLineWidth(0.3);
+    pdf.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 3;
 
     data.experience.forEach((exp, index) => {
       // Check if we need a new page
@@ -163,16 +163,16 @@ export const generateResumePDF = (data: ResumeData) => {
       yPos = margin;
     }
 
-    // Add line above section
-    pdf.setDrawColor(200, 200, 200);
-    pdf.setLineWidth(0.5);
-    pdf.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 3;
-
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
     pdf.text('PROJECTS', margin, yPos);
-    yPos += 4.5;
+    yPos += 2;
+
+    // Add line below section title
+    pdf.setDrawColor(0, 0, 0);
+    pdf.setLineWidth(0.3);
+    pdf.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 3;
 
     data.projects.forEach((project, index) => {
       if (yPos > 260) {
@@ -217,16 +217,16 @@ export const generateResumePDF = (data: ResumeData) => {
       yPos = margin;
     }
 
-    // Add line above section
-    pdf.setDrawColor(200, 200, 200);
-    pdf.setLineWidth(0.5);
-    pdf.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 3;
-
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
     pdf.text('EDUCATION', margin, yPos);
-    yPos += 4.5;
+    yPos += 2;
+
+    // Add line below section title
+    pdf.setDrawColor(0, 0, 0);
+    pdf.setLineWidth(0.3);
+    pdf.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 3;
 
     data.education.forEach((edu, index) => {
       pdf.setFontSize(11);
