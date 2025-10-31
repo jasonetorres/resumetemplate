@@ -62,45 +62,66 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
     onUpdate({ ...data, education });
   };
 
-  const SectionWithGuidance: React.FC<{ 
-    children: React.ReactNode; 
+  const SectionWithGuidance: React.FC<{
+    children: React.ReactNode;
     guidance: React.ReactNode;
     sectionName: string;
   }> = ({ children, guidance, sectionName }) => {
     const [showModal, setShowModal] = useState(false);
-    
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
+    const modalRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (modalRef.current && !modalRef.current.contains(event.target as Node) &&
+            buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
+          setShowModal(false);
+        }
+      };
+
+      if (showModal) {
+        document.addEventListener('mousedown', handleClickOutside);
+      }
+
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [showModal]);
+
     return (
       <div className="space-y-4">
         {children}
         {showGuidance && (
-          <div className="border-t border-gray-200 pt-3">
+          <div className="border-t border-gray-200 pt-3 relative">
             <button
-              onClick={() => setShowModal(true)}
+              ref={buttonRef}
+              onClick={() => setShowModal(!showModal)}
               className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg text-sm font-medium transition-all duration-200 hover:from-amber-600 hover:to-orange-600 hover:shadow-md hover:-translate-y-0.5 shadow-sm"
             >
               <span>💡 Tips for {sectionName}</span>
             </button>
-            
-            {/* Modal */}
+
+            {/* Popover */}
             {showModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-                  <div className="p-6 border-b border-gray-200">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-bold text-gray-900">Tips for {sectionName}</h3>
-                      <button
-                        onClick={() => setShowModal(false)}
-                        className="text-gray-400 hover:text-gray-600 transition-colors"
-                      >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
+              <div
+                ref={modalRef}
+                className="absolute left-0 top-full mt-2 bg-white rounded-xl shadow-2xl border border-slate-200 max-w-2xl w-full max-h-[500px] overflow-y-auto z-50"
+              >
+                <div className="p-4 border-b border-slate-200 bg-gradient-to-r from-amber-50 to-orange-50">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-800">💡 Tips for {sectionName}</h3>
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="text-slate-400 hover:text-slate-600 transition-colors"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
                   </div>
-                  <div className="p-6">
-                    {guidance}
-                  </div>
+                </div>
+                <div className="p-4">
+                  {guidance}
                 </div>
               </div>
             )}
