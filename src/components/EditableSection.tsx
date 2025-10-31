@@ -21,6 +21,7 @@ const EditableSection: React.FC<EditableSectionProps> = ({
   children
 }) => {
   const editorContainerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isEditing && editorContainerRef.current) {
@@ -32,6 +33,44 @@ const EditableSection: React.FC<EditableSectionProps> = ({
         }
       }, 100);
     }
+  }, [isEditing]);
+
+  useEffect(() => {
+    if (!isEditing || !containerRef.current) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      const focusableElements = containerRef.current?.querySelectorAll(
+        'input:not([tabindex="-1"]), textarea:not([tabindex="-1"]), button:not([tabindex="-1"])'
+      );
+
+      if (!focusableElements || focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      if (e.shiftKey) {
+        // Shift+Tab: moving backwards
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        // Tab: moving forwards
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    containerRef.current.addEventListener('keydown', handleKeyDown);
+    const currentContainer = containerRef.current;
+
+    return () => {
+      currentContainer?.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isEditing]);
   const handleEdit = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -53,7 +92,7 @@ const EditableSection: React.FC<EditableSectionProps> = ({
 
   if (isEditing) {
     return (
-      <div className="relative border-2 rounded-2xl p-6 bg-white" style={{ borderColor: '#0044ff' }}>
+      <div ref={containerRef} className="relative border-2 rounded-2xl p-6 bg-white" style={{ borderColor: '#0044ff' }}>
         <div className="mb-4">
           <h3 className="text-base sm:text-lg font-semibold font-inter text-gray-900">Editing: {title}</h3>
         </div>
