@@ -44,6 +44,12 @@ export const generateResumePDF = (data: ResumeData) => {
       : '';
 
     if (summaryContent) {
+      // Add line above section
+      pdf.setDrawColor(200, 200, 200);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin, yPos, pageWidth - margin, yPos);
+      yPos += 3;
+
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
       pdf.text('PROFESSIONAL SUMMARY', margin, yPos);
@@ -62,6 +68,12 @@ export const generateResumePDF = (data: ResumeData) => {
     const hasSkills = Object.values(data.technicalSkills).some(skill => skill && String(skill).trim());
 
     if (hasSkills) {
+      // Add line above section
+      pdf.setDrawColor(200, 200, 200);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin, yPos, pageWidth - margin, yPos);
+      yPos += 3;
+
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
       pdf.text('TECHNICAL SKILLS', margin, yPos);
@@ -92,6 +104,12 @@ export const generateResumePDF = (data: ResumeData) => {
 
   // Experience
   if (data.experience && data.experience.length > 0) {
+    // Add line above section
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.5);
+    pdf.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 3;
+
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
     pdf.text('EXPERIENCE', margin, yPos);
@@ -145,6 +163,12 @@ export const generateResumePDF = (data: ResumeData) => {
       yPos = margin;
     }
 
+    // Add line above section
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.5);
+    pdf.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 3;
+
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
     pdf.text('PROJECTS', margin, yPos);
@@ -192,6 +216,12 @@ export const generateResumePDF = (data: ResumeData) => {
       pdf.addPage();
       yPos = margin;
     }
+
+    // Add line above section
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.5);
+    pdf.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 3;
 
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
