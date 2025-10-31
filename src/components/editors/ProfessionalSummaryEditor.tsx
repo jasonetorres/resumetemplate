@@ -38,7 +38,6 @@ const ProfessionalSummaryEditor: React.FC<ProfessionalSummaryEditorProps> = ({ d
           value={localData.content}
           onChange={(e) => handleChange(e.target.value)}
           onBlur={handleBlur}
-          onBlur={handleBlur}
           rows={12}
           className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 font-mono text-sm bg-white text-gray-900"
           style={{ '--tw-ring-color': '#0044ff' } as React.CSSProperties}
