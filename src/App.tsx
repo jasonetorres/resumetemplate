@@ -124,17 +124,21 @@ function App() {
   // Add key to force re-render when switching tabs to prevent stale state
   const [componentKey, setComponentKey] = useState(0);
 
+  const { loadData, clearData } = useAutoSave(resumeData, coverLetterData, dataLoaded);
+
   useEffect(() => {
     const initializeData = async () => {
       try {
-        const saved = localStorage.getItem('resumeData');
-        if (saved) {
-          const savedData = JSON.parse(saved);
+        const savedData = await loadData();
+        if (savedData) {
+          console.log('[App] Loading saved data');
           setResumeData(savedData.resumeData);
           setCoverLetterData(savedData.coverLetterData);
+        } else {
+          console.log('[App] No saved data, using template');
         }
       } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('[App] Error loading data:', error);
       }
       setDataLoaded(true);
       setIsLoading(false);
@@ -143,8 +147,13 @@ function App() {
     initializeData();
   }, []);
 
-  // Only enable auto-save after initial data load
-  useAutoSave(resumeData, coverLetterData, dataLoaded);
+  const handleClearData = () => {
+    if (confirm('Are you sure you want to clear all saved data and reset to the template?')) {
+      clearData();
+      setResumeData(initialResumeData);
+      setCoverLetterData(initialCoverLetterData);
+    }
+  };
 
   // Auto-sync personal info from resume to cover letter
   const updateResumeData = (newResumeData: ResumeData) => {

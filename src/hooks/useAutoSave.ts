@@ -13,6 +13,7 @@ export const useAutoSave = (
   useEffect(() => {
     // Don't save if not enabled (still loading initial data)
     if (!enabled) {
+      console.log('[AutoSave] Disabled, skipping save');
       return;
     }
 
@@ -21,7 +22,17 @@ export const useAutoSave = (
     }
 
     saveTimeoutRef.current = setTimeout(() => {
-      saveData();
+      try {
+        const dataToSave = {
+          resumeData,
+          coverLetterData,
+        };
+        console.log('[AutoSave] Saving data...', dataToSave.resumeData.personalInfo.name);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+        console.log('[AutoSave] Saved successfully');
+      } catch (error) {
+        console.error('[AutoSave] Error saving data:', error);
+      }
     }, 1000);
 
     return () => {
@@ -36,26 +47,21 @@ export const useAutoSave = (
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
+        console.log('[AutoSave] Loaded data:', parsed.resumeData.personalInfo.name);
         return parsed;
       }
+      console.log('[AutoSave] No saved data found');
       return null;
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('[AutoSave] Error loading data:', error);
       return null;
     }
   };
 
-  const saveData = async () => {
-    try {
-      const dataToSave = {
-        resumeData,
-        coverLetterData,
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
+  const clearData = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    console.log('[AutoSave] Cleared saved data');
   };
 
-  return { loadData, saveData };
+  return { loadData, clearData };
 };
