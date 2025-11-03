@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileText, Download, Edit3, Info, FileDown, Printer, FileType, File, Mail } from 'lucide-react';
 import ResumePreview from './components/ResumePreview';
 import CoverLetterPreview from './components/CoverLetterPreview';
 import ExportConfirmationModal from './components/ExportConfirmationModal';
 import { ResumeData, CoverLetterData } from './types/resume';
 import { generateResumePDF, generateCoverLetterPDF } from './utils/pdfGenerator';
+import { useAutoSave } from './hooks/useAutoSave';
 
 const initialResumeData: ResumeData = {
   personalInfo: {
@@ -117,9 +118,25 @@ function App() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingExportAction, setPendingExportAction] = useState<(() => void) | null>(null);
   const [exportType, setExportType] = useState<string>('');
-  
+  const [isLoading, setIsLoading] = useState(true);
+
   // Add key to force re-render when switching tabs to prevent stale state
   const [componentKey, setComponentKey] = useState(0);
+
+  const { loadData } = useAutoSave(resumeData, coverLetterData);
+
+  useEffect(() => {
+    const initializeData = async () => {
+      const savedData = await loadData();
+      if (savedData) {
+        setResumeData(savedData.resumeData);
+        setCoverLetterData(savedData.coverLetterData);
+      }
+      setIsLoading(false);
+    };
+
+    initializeData();
+  }, []);
 
   // Auto-sync personal info from resume to cover letter
   const updateResumeData = (newResumeData: ResumeData) => {
@@ -832,6 +849,17 @@ ${data.personalInfo.name}
       }, 5000);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+          <p className="mt-4 text-gray-600">Loading your resume...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
