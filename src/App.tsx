@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { FileText, Download, Edit3, Info, FileDown, Printer, FileType, File, Mail, Save, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { FileText, Download, Edit3, Info, FileDown, Printer, FileType, File, Mail } from 'lucide-react';
 import ResumePreview from './components/ResumePreview';
 import CoverLetterPreview from './components/CoverLetterPreview';
 import ExportConfirmationModal from './components/ExportConfirmationModal';
 import { ResumeData, CoverLetterData } from './types/resume';
 import { generateResumePDF, generateCoverLetterPDF } from './utils/pdfGenerator';
-import { useDocumentPersistence } from './hooks/useDocumentPersistence';
+
+const STORAGE_KEY = 'torc_resume_data';
 
 const initialResumeData: ResumeData = {
   personalInfo: {
@@ -110,56 +111,59 @@ const initialCoverLetterData: CoverLetterData = {
 };
 
 function App() {
-  const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
-  const [coverLetterData, setCoverLetterData] = useState<CoverLetterData>(initialCoverLetterData);
+  const [resumeData, setResumeData] = useState<ResumeData>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved).resumeData;
+      } catch (e) {
+        return initialResumeData;
+      }
+    }
+    return initialResumeData;
+  });
+
+  const [coverLetterData, setCoverLetterData] = useState<CoverLetterData>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved).coverLetterData;
+      } catch (e) {
+        return initialCoverLetterData;
+      }
+    }
+    return initialCoverLetterData;
+  });
+
   const [activeTab, setActiveTab] = useState<'resume' | 'cover-letter'>('resume');
   const [showGuidance, setShowGuidance] = useState(true);
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingExportAction, setPendingExportAction] = useState<(() => void) | null>(null);
   const [exportType, setExportType] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [userId, setUserId] = useState<string | null>(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [componentKey, setComponentKey] = useState(0);
 
-  const { isSaving, lastSaved, loadDocument, createNewDocument } = useDocumentPersistence(
-    resumeData,
-    coverLetterData,
-    userId
-  );
+  const saveTimeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    const initializeData = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const docId = urlParams.get('doc');
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
 
-      if (docId) {
-        const doc = await loadDocument(docId);
-        if (doc) {
-          setResumeData(doc.resume_data);
-          setCoverLetterData(doc.cover_letter_data);
-          setUserId(docId);
-        } else {
-          const newId = await createNewDocument();
-          if (newId) {
-            setUserId(newId);
-            window.history.replaceState({}, '', `?doc=${newId}`);
-          }
-        }
-      } else {
-        const newId = await createNewDocument();
-        if (newId) {
-          setUserId(newId);
-          window.history.replaceState({}, '', `?doc=${newId}`);
-        }
+    saveTimeoutRef.current = setTimeout(() => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        resumeData,
+        coverLetterData
+      }));
+    }, 500);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
       }
-
-      setIsLoading(false);
     };
-
-    initializeData();
-  }, []);
+  }, [resumeData, coverLetterData]);
 
   // Auto-sync personal info from resume to cover letter
   const updateResumeData = (newResumeData: ResumeData) => {
@@ -895,17 +899,6 @@ ${data.personalInfo.name}
               <h1 className="text-lg sm:text-2xl font-bold text-slate-900">Torc Resume & Cover Letter</h1>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
-              {isSaving ? (
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
-                  <Save className="w-4 h-4 animate-pulse" />
-                  <span className="hidden sm:inline">Saving...</span>
-                </div>
-              ) : lastSaved ? (
-                <div className="flex items-center space-x-2 text-sm text-green-600">
-                  <CheckCircle className="w-4 h-4" />
-                  <span className="hidden sm:inline">Saved</span>
-                </div>
-              ) : null}
               <button
                 onClick={() => setShowGuidance(!showGuidance)}
                 className="hidden sm:flex items-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 hover:shadow-md transition-all duration-200 font-medium text-sm sm:text-base shadow-sm"
