@@ -119,24 +119,32 @@ function App() {
   const [pendingExportAction, setPendingExportAction] = useState<(() => void) | null>(null);
   const [exportType, setExportType] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   // Add key to force re-render when switching tabs to prevent stale state
   const [componentKey, setComponentKey] = useState(0);
 
-  const { loadData } = useAutoSave(resumeData, coverLetterData);
-
   useEffect(() => {
     const initializeData = async () => {
-      const savedData = await loadData();
-      if (savedData) {
-        setResumeData(savedData.resumeData);
-        setCoverLetterData(savedData.coverLetterData);
+      try {
+        const saved = localStorage.getItem('resumeData');
+        if (saved) {
+          const savedData = JSON.parse(saved);
+          setResumeData(savedData.resumeData);
+          setCoverLetterData(savedData.coverLetterData);
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
       }
+      setDataLoaded(true);
       setIsLoading(false);
     };
 
     initializeData();
   }, []);
+
+  // Only enable auto-save after initial data load
+  useAutoSave(resumeData, coverLetterData, dataLoaded);
 
   // Auto-sync personal info from resume to cover letter
   const updateResumeData = (newResumeData: ResumeData) => {

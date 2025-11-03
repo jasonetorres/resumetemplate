@@ -5,15 +5,14 @@ const STORAGE_KEY = 'resumeData';
 
 export const useAutoSave = (
   resumeData: ResumeData,
-  coverLetterData: CoverLetterData
+  coverLetterData: CoverLetterData,
+  enabled: boolean = true
 ) => {
   const saveTimeoutRef = useRef<NodeJS.Timeout>();
-  const isInitialLoadRef = useRef(true);
 
   useEffect(() => {
-    // Skip saving on initial load
-    if (isInitialLoadRef.current) {
-      isInitialLoadRef.current = false;
+    // Don't save if not enabled (still loading initial data)
+    if (!enabled) {
       return;
     }
 
@@ -30,18 +29,15 @@ export const useAutoSave = (
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [resumeData, coverLetterData]);
+  }, [resumeData, coverLetterData, enabled]);
 
   const loadData = async () => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      console.log('Loading from localStorage:', saved);
       if (saved) {
         const parsed = JSON.parse(saved);
-        console.log('Loaded data:', parsed);
         return parsed;
       }
-      console.log('No saved data found');
       return null;
     } catch (error) {
       console.error('Error loading data:', error);
@@ -55,9 +51,7 @@ export const useAutoSave = (
         resumeData,
         coverLetterData,
       };
-      console.log('Saving to localStorage:', dataToSave);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-      console.log('Saved successfully');
     } catch (error) {
       console.error('Error saving data:', error);
     }

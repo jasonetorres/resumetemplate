@@ -39,7 +39,6 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
   };
 
   const handleUpdatePersonalInfo = (personalInfo: PersonalInfo) => {
-    console.log('Updating personal info:', personalInfo);
     onUpdate({ ...data, personalInfo });
   };
 
