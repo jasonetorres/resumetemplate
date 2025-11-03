@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Download, Edit3, Info, FileDown, Printer, FileType, File, Mail } from 'lucide-react';
+import { FileText, Download, Edit3, Info, FileDown, Printer, FileType, File, Mail, Save, CheckCircle } from 'lucide-react';
 import ResumePreview from './components/ResumePreview';
 import CoverLetterPreview from './components/CoverLetterPreview';
 import ExportConfirmationModal from './components/ExportConfirmationModal';
 import { ResumeData, CoverLetterData } from './types/resume';
 import { generateResumePDF, generateCoverLetterPDF } from './utils/pdfGenerator';
-import { useAutoSave } from './hooks/useAutoSave';
+import { useDocumentPersistence } from './hooks/useDocumentPersistence';
 
 const initialResumeData: ResumeData = {
   personalInfo: {
@@ -119,41 +119,47 @@ function App() {
   const [pendingExportAction, setPendingExportAction] = useState<(() => void) | null>(null);
   const [exportType, setExportType] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  // Add key to force re-render when switching tabs to prevent stale state
   const [componentKey, setComponentKey] = useState(0);
 
-  const { loadData, clearData } = useAutoSave(resumeData, coverLetterData, dataLoaded);
+  const { isSaving, lastSaved, loadDocument, createNewDocument } = useDocumentPersistence(
+    resumeData,
+    coverLetterData,
+    userId
+  );
 
   useEffect(() => {
     const initializeData = async () => {
-      try {
-        const savedData = await loadData();
-        if (savedData) {
-          console.log('[App] Loading saved data');
-          setResumeData(savedData.resumeData);
-          setCoverLetterData(savedData.coverLetterData);
+      const urlParams = new URLSearchParams(window.location.search);
+      const docId = urlParams.get('doc');
+
+      if (docId) {
+        const doc = await loadDocument(docId);
+        if (doc) {
+          setResumeData(doc.resume_data);
+          setCoverLetterData(doc.cover_letter_data);
+          setUserId(docId);
         } else {
-          console.log('[App] No saved data, using template');
+          const newId = await createNewDocument();
+          if (newId) {
+            setUserId(newId);
+            window.history.replaceState({}, '', `?doc=${newId}`);
+          }
         }
-      } catch (error) {
-        console.error('[App] Error loading data:', error);
+      } else {
+        const newId = await createNewDocument();
+        if (newId) {
+          setUserId(newId);
+          window.history.replaceState({}, '', `?doc=${newId}`);
+        }
       }
-      setDataLoaded(true);
+
       setIsLoading(false);
     };
 
     initializeData();
   }, []);
-
-  const handleClearData = () => {
-    if (confirm('Are you sure you want to clear all saved data and reset to the template?')) {
-      clearData();
-      setResumeData(initialResumeData);
-      setCoverLetterData(initialCoverLetterData);
-    }
-  };
 
   // Auto-sync personal info from resume to cover letter
   const updateResumeData = (newResumeData: ResumeData) => {
@@ -889,6 +895,17 @@ ${data.personalInfo.name}
               <h1 className="text-lg sm:text-2xl font-bold text-slate-900">Torc Resume & Cover Letter</h1>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
+              {isSaving ? (
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Save className="w-4 h-4 animate-pulse" />
+                  <span className="hidden sm:inline">Saving...</span>
+                </div>
+              ) : lastSaved ? (
+                <div className="flex items-center space-x-2 text-sm text-green-600">
+                  <CheckCircle className="w-4 h-4" />
+                  <span className="hidden sm:inline">Saved</span>
+                </div>
+              ) : null}
               <button
                 onClick={() => setShowGuidance(!showGuidance)}
                 className="hidden sm:flex items-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 hover:shadow-md transition-all duration-200 font-medium text-sm sm:text-base shadow-sm"
