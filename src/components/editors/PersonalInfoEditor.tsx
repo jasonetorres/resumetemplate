@@ -15,6 +15,7 @@ const PersonalInfoEditor = React.forwardRef<{ saveChanges: () => void; discardCh
     const handleChange = (field: keyof PersonalInfo, value: string) => {
       const newData = { ...localData, [field]: value };
       setLocalData(newData);
+      onUpdate(newData);
     };
 
     React.useImperativeHandle(ref, () => ({
