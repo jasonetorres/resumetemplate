@@ -35,9 +35,13 @@ export const useAutoSave = (
   const loadData = async () => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
+      console.log('Loading from localStorage:', saved);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        console.log('Loaded data:', parsed);
+        return parsed;
       }
+      console.log('No saved data found');
       return null;
     } catch (error) {
       console.error('Error loading data:', error);
@@ -47,10 +51,13 @@ export const useAutoSave = (
 
   const saveData = async () => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      const dataToSave = {
         resumeData,
         coverLetterData,
-      }));
+      };
+      console.log('Saving to localStorage:', dataToSave);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+      console.log('Saved successfully');
     } catch (error) {
       console.error('Error saving data:', error);
     }
