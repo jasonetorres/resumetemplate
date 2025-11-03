@@ -25,16 +25,23 @@ interface ResumePreviewProps {
 
 const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuidance }) => {
   const [editingSection, setEditingSection] = useState<string | null>(null);
+  const personalInfoEditorRef = React.useRef<{ saveChanges: () => void; discardChanges: () => void }>(null);
 
   const handleEdit = (section: string) => {
     setEditingSection(section);
   };
 
   const handleSave = () => {
+    if (editingSection === 'personal' && personalInfoEditorRef.current) {
+      personalInfoEditorRef.current.saveChanges();
+    }
     setEditingSection(null);
   };
 
   const handleCancel = () => {
+    if (editingSection === 'personal' && personalInfoEditorRef.current) {
+      personalInfoEditorRef.current.discardChanges();
+    }
     setEditingSection(null);
   };
 
@@ -150,6 +157,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
           onCancel={handleCancel}
           editor={
             <PersonalInfoEditor
+              ref={personalInfoEditorRef}
               data={data.personalInfo}
               onUpdate={handleUpdatePersonalInfo}
             />
