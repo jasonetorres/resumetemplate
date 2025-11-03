@@ -8,8 +8,15 @@ export const useAutoSave = (
   coverLetterData: CoverLetterData
 ) => {
   const saveTimeoutRef = useRef<NodeJS.Timeout>();
+  const isInitialLoadRef = useRef(true);
 
   useEffect(() => {
+    // Skip saving on initial load
+    if (isInitialLoadRef.current) {
+      isInitialLoadRef.current = false;
+      return;
+    }
+
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
     }
