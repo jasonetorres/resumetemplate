@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PersonalInfo } from '../../types/resume';
 
 interface PersonalInfoEditorProps {
@@ -11,18 +11,40 @@ interface PersonalInfoEditorProps {
 const PersonalInfoEditor = React.forwardRef<{ saveChanges: () => void; discardChanges: () => void }, PersonalInfoEditorProps>(
   ({ data, onUpdate, onSave, onCancel }, ref) => {
     const [localData, setLocalData] = useState<PersonalInfo>(data);
+    const updateTimeoutRef = useRef<NodeJS.Timeout>();
 
     const handleChange = (field: keyof PersonalInfo, value: string) => {
       const newData = { ...localData, [field]: value };
       setLocalData(newData);
-      onUpdate(newData);
+
+      if (updateTimeoutRef.current) {
+        clearTimeout(updateTimeoutRef.current);
+      }
+
+      updateTimeoutRef.current = setTimeout(() => {
+        onUpdate(newData);
+      }, 500);
     };
+
+    useEffect(() => {
+      return () => {
+        if (updateTimeoutRef.current) {
+          clearTimeout(updateTimeoutRef.current);
+        }
+      };
+    }, []);
 
     React.useImperativeHandle(ref, () => ({
       saveChanges: () => {
+        if (updateTimeoutRef.current) {
+          clearTimeout(updateTimeoutRef.current);
+        }
         onUpdate(localData);
       },
       discardChanges: () => {
+        if (updateTimeoutRef.current) {
+          clearTimeout(updateTimeoutRef.current);
+        }
         setLocalData(data);
       }
     }));
