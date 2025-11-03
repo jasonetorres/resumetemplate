@@ -122,24 +122,26 @@ export const generateResumePDF = (data: ResumeData) => {
         yPos = margin;
       }
 
+      // Company and Location on left, Duration on right
       pdf.setFontSize(11);
       pdf.setFont('helvetica', 'bold');
-      if (exp.position) {
-        pdf.text(exp.position, margin, yPos);
-        yPos += 3.5;
-      }
-
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'italic');
       const companyLine = [exp.company, exp.location].filter(Boolean).join(' | ');
       if (companyLine) {
         pdf.text(companyLine, margin, yPos);
-        yPos += 3.5;
       }
 
-      pdf.setFont('helvetica', 'normal');
       if (exp.duration) {
-        pdf.text(exp.duration, margin, yPos);
+        pdf.setFont('helvetica', 'normal');
+        const durationWidth = pdf.getTextWidth(exp.duration);
+        pdf.text(exp.duration, pageWidth - margin - durationWidth, yPos);
+      }
+      yPos += 4;
+
+      // Position on next line
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      if (exp.position) {
+        pdf.text(exp.position, margin, yPos);
         yPos += 4.5;
       }
 
