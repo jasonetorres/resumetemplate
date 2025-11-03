@@ -322,12 +322,11 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ data, onUpdate, showGuida
               {data.experience.map((exp, index) => (
                 <div key={index}>
                   <div className="mb-2">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
-                      <div>
-                        <h4 className="font-bold text-gray-900 text-sm sm:text-base">{exp.company} | {exp.location}</h4>
-                        <div className="text-gray-700 text-sm sm:text-base">{exp.position} | {exp.duration}</div>
-                      </div>
+                    <div className="flex justify-between items-start">
+                      <h4 className="font-bold text-gray-900 text-sm sm:text-base">{exp.company} | {exp.location}</h4>
+                      <div className="text-gray-700 text-sm sm:text-base whitespace-nowrap ml-4">{exp.duration}</div>
                     </div>
+                    <div className="text-gray-700 text-sm sm:text-base">{exp.position}</div>
                     <div className="text-xs sm:text-sm italic mt-1" style={{ color: '#0044ff' }}>
                       Technologies: {exp.technologies}
                     </div>
