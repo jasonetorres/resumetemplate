@@ -35,6 +35,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate, o
       content: localData.content
     };
     setLocalData(newData);
+    onUpdate(newData);
   };
 
   const handleContentChange = (field: keyof typeof data.content, value: string) => {
@@ -43,6 +44,7 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate, o
       content: { ...localData.content, [field]: value }
     };
     setLocalData(newData);
+    onUpdate(newData);
   };
 
   const coverLetterTemplates = {
@@ -94,7 +96,8 @@ const CoverLetterEditor: React.FC<CoverLetterEditorProps> = ({ data, onUpdate, o
           closing: template.closing
         }
       };
-setLocalData(newData);
+      setLocalData(newData);
+      onUpdate(newData);
       setShowTemplates(false);
     }
   };
