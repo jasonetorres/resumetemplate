@@ -23,14 +23,30 @@ export const generateResumePDF = (data: ResumeData) => {
     yPos += 3.5;
   }
 
-  // Links on another line
-  const links = [
+  // Links on another line - with clickable hyperlinks
+  const linkItems = [
     data.personalInfo.linkedin,
     data.personalInfo.github,
     data.personalInfo.website
-  ].filter(Boolean).join(' | ');
-  if (links) {
-    pdf.text(links, pageWidth / 2, yPos, { align: 'center' });
+  ].filter(Boolean);
+
+  if (linkItems.length > 0) {
+    const linkText = linkItems.join(' | ');
+    const textWidth = pdf.getTextWidth(linkText);
+    const startX = (pageWidth - textWidth) / 2;
+
+    let currentX = startX;
+    linkItems.forEach((link, index) => {
+      // Add clickable link
+      pdf.textWithLink(link, currentX, yPos, { url: link });
+      currentX += pdf.getTextWidth(link);
+
+      // Add separator if not the last item
+      if (index < linkItems.length - 1) {
+        pdf.text(' | ', currentX, yPos);
+        currentX += pdf.getTextWidth(' | ');
+      }
+    });
     yPos += 3.5;
   }
   yPos += 3;
@@ -207,8 +223,19 @@ export const generateResumePDF = (data: ResumeData) => {
             yPos += bulletLines.length * 4.2;
           }
         });
-        yPos += 2.5;
       }
+
+      // Add project URL as clickable link if available
+      if (project.url) {
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'italic');
+        pdf.text('URL: ', margin + 2, yPos);
+        const urlLabelWidth = pdf.getTextWidth('URL: ');
+        pdf.textWithLink(project.url, margin + 2 + urlLabelWidth, yPos, { url: project.url });
+        yPos += 3.5;
+      }
+
+      yPos += 2.5;
     });
   }
 
@@ -351,13 +378,24 @@ export const generateCoverLetterPDF = (data: CoverLetterData) => {
     yPos += 4;
   }
 
-  const webInfo = [
+  const webLinks = [
     data.personalInfo.linkedin,
     data.personalInfo.github
-  ].filter(Boolean).join(' | ');
+  ].filter(Boolean);
 
-  if (webInfo) {
-    pdf.text(webInfo, margin, yPos);
+  if (webLinks.length > 0) {
+    let currentX = margin;
+    webLinks.forEach((link, index) => {
+      // Add clickable link
+      pdf.textWithLink(link, currentX, yPos, { url: link });
+      currentX += pdf.getTextWidth(link);
+
+      // Add separator if not the last item
+      if (index < webLinks.length - 1) {
+        pdf.text(' | ', currentX, yPos);
+        currentX += pdf.getTextWidth(' | ');
+      }
+    });
   }
 
   return pdf;
